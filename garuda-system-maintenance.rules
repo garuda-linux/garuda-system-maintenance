@@ -1,0 +1,6 @@
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.systemd1.manage-units" &&
+        (action.lookup("unit") == "garuda-system-maintenance@keyring.service" || action.lookup("unit") == "garuda-system-maintenance@keyring-hotfixes.service") && action.lookup("verb") == "start") {
+        return polkit.Result.YES;
+    }
+});
