@@ -5,26 +5,35 @@
 #include <QProcess>
 #include <QSettings>
 #include <QTimer>
+#include <KNotifications/KStatusNotifierItem>
+#include <QPointer>
+#include "settingsdialog.h"
 
 class QSystemTrayIcon;
 class QNetworkAccessManager;
+class SettingsDialog;
 
 class Tray : public QMainWindow {
     Q_OBJECT
 
-    QSystemTrayIcon* trayicon = nullptr;
+    KStatusNotifierItem* trayicon = nullptr;
     void updateKeyring(bool hotfixes = false);
     void checkUpdates();
     void checkPackage(QString package, QNetworkAccessManager *mgr, std::function<void(bool success)> next);
     bool busy = false;
 
-    QTimer timer;
+    QTimer package_timer;
+    QTimer forum_timer;
     QSettings settings;
+
+    QPointer<SettingsDialog> dialog = nullptr;
 
 private slots:
     void onKeyringsInstalled(int, QProcess::ExitStatus, QProcess* process, bool hotfix);
     void onCheckUpdatesComplete(int, QProcess::ExitStatus, QProcess* process);
     void onShouldCheckPackages();
+    void onCheckForum();
+    void onReloadSettings();
 
 public:
     Tray(QWidget* parent = nullptr);

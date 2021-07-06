@@ -26,11 +26,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Network REQUIRED)
+find_package(KF5Notifications)
 
 set(PROJECT_SOURCES
         main.cpp
         tray.cpp
         tray.h
+        settingsdialog.h
+        settingsdialog.cpp
+        settingsdialog.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -50,7 +54,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(garuda-system-maintenance PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
+target_link_libraries(garuda-system-maintenance PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network KF5::Notifications)
 
 set_target_properties(garuda-system-maintenance PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

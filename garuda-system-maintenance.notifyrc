@@ -1,0 +1,7 @@
+[Global]
+IconName=garuda-system-maintenance
+Name=Garuda System Maintenance
+
+[Event/forum]
+Name=Forum announcement post
+Action=Popup
