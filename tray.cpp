@@ -4,6 +4,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QDesktopServices>
+#include <QFileSystemWatcher>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -13,7 +14,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <functional>
-#include <QFileSystemWatcher>
+#include <QFile>
 
 constexpr int KEYRING_FIRST_CHECK_TIME = 60 * 1000;
 constexpr int KEYRING_CHECK_TIME = 30 * 60 * 1000;
@@ -73,7 +74,11 @@ Tray::Tray(QWidget* parent)
 
     watcher = new QFileSystemWatcher(this);
     watcher->addPath(settings.fileName());
-    connect(watcher, &QFileSystemWatcher::fileChanged, this, &Tray::onReloadSettings);
+    connect(watcher, &QFileSystemWatcher::fileChanged, this, [this](const QString& path) {
+        if (!watcher->files().contains(path) && QFile::exists(path))
+            watcher->addPath(path);
+        onReloadSettings();
+    });
 
     onReloadSettings();
 }
@@ -190,61 +195,57 @@ void Tray::onCheckForum()
     auto network_reply = network_manager->get(QNetworkRequest(QString("https://forum.garudalinux.org/c/announcements/announcements-maintenance/45.json")));
     connect(network_reply, &QNetworkReply::finished, this,
         [this, network_reply, network_manager]() {
-        if (network_reply->error() == network_reply->NoError && network_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute) == 200) {
-            auto json = QJsonDocument::fromJson(network_reply->readAll()).object();
-            auto topics = json["topic_list"].toObject()["topics"].toArray();
-            std::sort(topics.begin(), topics.end(), [](const QJsonValue& v1, const QJsonValue& v2) {
-                return v1.toObject()["created_at"].toString() > v2.toObject()["created_at"].toString();
-            });
-            auto newest = topics[0].toObject();
-            auto utctimestamp = newest["created_at"].toString();
-            if (utctimestamp <= settings.value("timestamps/forum").toString())
-                return;
+            if (network_reply->error() == network_reply->NoError && network_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute) == 200) {
+                auto json = QJsonDocument::fromJson(network_reply->readAll()).object();
+                auto topics = json["topic_list"].toObject()["topics"].toArray();
+                std::sort(topics.begin(), topics.end(), [](const QJsonValue& v1, const QJsonValue& v2) {
+                    return v1.toObject()["created_at"].toString() > v2.toObject()["created_at"].toString();
+                });
+                auto newest = topics[0].toObject();
+                auto utctimestamp = newest["created_at"].toString();
+                if (utctimestamp <= settings.value("timestamps/forum").toString())
+                    return;
 
-            QString messagetext;
-            auto url = "https://forum.garudalinux.org/t/" + QString::number(newest["id"].toInt());
-            if (newest.contains("excerpt")) {
-                auto excerpt = newest["excerpt"].toString();
-                messagetext = url + "\n" + excerpt.left(150).replace("&hellip;", "...");
-                if (excerpt.length() > 150)
-                    messagetext += "...";
-            } else {
-                messagetext = "Visit " + url + ".";
+                QString messagetext;
+                auto url = "https://forum.garudalinux.org/t/" + QString::number(newest["id"].toInt());
+                if (newest.contains("excerpt")) {
+                    auto excerpt = newest["excerpt"].toString();
+                    messagetext = url + "\n" + excerpt.left(150).replace("&hellip;", "...");
+                    if (excerpt.length() > 150)
+                        messagetext += "...";
+                } else {
+                    messagetext = "Visit " + url + ".";
+                }
+
+                settings.setValue("timestamps/forum", utctimestamp);
+
+                KNotification* notification = new KNotification("forum", KNotification::Persistent);
+                notification->setTitle("New maintenance announcement: " + newest["title"].toString());
+                notification->setText(messagetext);
+                notification->setActions({ "Open in browser" });
+                connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [url]() { QDesktopServices::openUrl(url); });
+                notification->sendEvent();
+
+                network_manager->deleteLater();
+                network_reply->deleteLater();
             }
-
-            settings.setValue("timestamps/forum", utctimestamp);
-
-            KNotification* notification = new KNotification("forum", KNotification::Persistent);
-            notification->setTitle("New maintenance announcement: " + newest["title"].toString());
-            notification->setText(messagetext);
-            notification->setActions({ "Open in browser" });
-            connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [url]() { QDesktopServices::openUrl(url); });
-            notification->sendEvent();
-
-            network_manager->deleteLater();
-            network_reply->deleteLater();
-        }
-        forum_timer.start(KEYRING_CHECK_TIME);
-    });
+            forum_timer.start(KEYRING_CHECK_TIME);
+        });
 }
 
 void Tray::onReloadSettings()
 {
     settings.sync();
-    if (settings.value("app/updatekeyrings", true).toBool())
-    {
+    if (settings.value("app/updatekeyrings", true).toBool()) {
         if (!package_timer.isActive())
             package_timer.start(KEYRING_FIRST_CHECK_TIME);
-    }
-    else
+    } else
         package_timer.stop();
-    if (settings.value("app/notifyforum", true).toBool())
-    {
+    if (settings.value("app/notifyforum", true).toBool()) {
         if (!forum_timer.isActive())
             // For now we can just use the same time here, doesn't matter.
             forum_timer.start(KEYRING_FIRST_CHECK_TIME);
-    }
-    else
+    } else
         forum_timer.stop();
 }
 
