@@ -6,6 +6,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
     ui->updateKeyrings->setChecked(settings.value("app/updatekeyrings", true).toBool());
     ui->updateHotfixes->setChecked(settings.value("app/updatehotfixes", true).toBool());
     ui->notifyForum->setChecked(settings.value("app/notifyforum", true).toBool());
@@ -18,7 +19,7 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::on_buttonBox_rejected()
 {
-    this->deleteLater();
+    this->close();
 }
 
 
@@ -27,7 +28,7 @@ void SettingsDialog::on_buttonBox_accepted()
     settings.setValue("app/updatekeyrings", ui->updateKeyrings->isChecked());
     settings.setValue("app/updatehotfixes", ui->updateHotfixes->isChecked());
     settings.setValue("app/notifyforum", ui->notifyForum->isChecked());
-    this->deleteLater();
+    this->close();
 }
 
 

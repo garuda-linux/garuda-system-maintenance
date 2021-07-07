@@ -12,11 +12,13 @@
 class QSystemTrayIcon;
 class QNetworkAccessManager;
 class SettingsDialog;
+class QFileSystemWatcher;
 
 class Tray : public QMainWindow {
     Q_OBJECT
 
     KStatusNotifierItem* trayicon = nullptr;
+    QFileSystemWatcher* watcher = nullptr;
     void updateKeyring(bool hotfixes = false);
     void checkUpdates();
     void checkPackage(QString package, QNetworkAccessManager *mgr, std::function<void(bool success)> next);

@@ -13,6 +13,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <functional>
+#include <QFileSystemWatcher>
 
 constexpr int KEYRING_FIRST_CHECK_TIME = 60 * 1000;
 constexpr int KEYRING_CHECK_TIME = 30 * 60 * 1000;
@@ -69,6 +70,10 @@ Tray::Tray(QWidget* parent)
     package_timer.setSingleShot(true);
     connect(&forum_timer, &QTimer::timeout, this, &Tray::onCheckForum);
     forum_timer.setSingleShot(true);
+
+    watcher = new QFileSystemWatcher(this);
+    watcher->addPath(settings.fileName());
+    connect(watcher, &QFileSystemWatcher::fileChanged, this, &Tray::onReloadSettings);
 
     onReloadSettings();
 }
@@ -185,6 +190,7 @@ void Tray::onCheckForum()
     auto network_reply = network_manager->get(QNetworkRequest(QString("https://forum.garudalinux.org/c/announcements/announcements-maintenance/45.json")));
     connect(network_reply, &QNetworkReply::finished, this,
         [this, network_reply, network_manager]() {
+        if (network_reply->error() == network_reply->NoError && network_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute) == 200) {
             auto json = QJsonDocument::fromJson(network_reply->readAll()).object();
             auto topics = json["topic_list"].toObject()["topics"].toArray();
             std::sort(topics.begin(), topics.end(), [](const QJsonValue& v1, const QJsonValue& v2) {
@@ -217,11 +223,14 @@ void Tray::onCheckForum()
 
             network_manager->deleteLater();
             network_reply->deleteLater();
+        }
+        forum_timer.start(KEYRING_CHECK_TIME);
     });
 }
 
 void Tray::onReloadSettings()
 {
+    settings.sync();
     if (settings.value("app/updatekeyrings", true).toBool())
     {
         if (!package_timer.isActive())
@@ -241,4 +250,6 @@ void Tray::onReloadSettings()
 
 Tray::~Tray()
 {
+    trayicon->deleteLater();
+    watcher->deleteLater();
 }
