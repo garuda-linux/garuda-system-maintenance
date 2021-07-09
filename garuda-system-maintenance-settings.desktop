@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Categories=System
+Comment=Control the behaviour of Garuda System Maintenance
+Exec=/usr/bin/garuda-system-maintenance --settings
+GenericName=System Maintenance
+Icon=garuda-system-maintenance
+Name=Garuda System Maintenance Settings
+Type=Application
