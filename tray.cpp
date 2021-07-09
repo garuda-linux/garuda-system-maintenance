@@ -31,8 +31,8 @@ inline void swap(QJsonValueRef v1, QJsonValueRef v2)
 Tray::Tray(QWidget* parent)
     : QMainWindow(parent)
 {
-    if (!settings.value("app/firstrun", false).toBool()) {
-        settings.setValue("app/firstrun", true);
+    if (!settings.value("application/firstrun", false).toBool()) {
+        settings.setValue("application/firstrun", true);
         settings.setValue("timestamps/forum", QDateTime::currentDateTimeUtc().toString(Qt::DateFormat::ISODateWithMs));
     }
 
@@ -140,7 +140,7 @@ void Tray::onCheckUpdatesComplete(int exitcode, QProcess::ExitStatus status, QPr
     busy = false;
     if (status == QProcess::ExitStatus::NormalExit && exitcode == 0) {
         auto output = process->readAllStandardOutput();
-        if (output.contains("garuda-hotfixes") && settings.value("app/updatehotfixes", true).toBool())
+        if (output.contains("garuda-hotfixes") && settings.value("application/updatehotfixes", true).toBool())
             updateKeyring(true);
         else if (output.contains("chaotic-keyring"))
             updateKeyring();
@@ -236,12 +236,12 @@ void Tray::onCheckForum()
 void Tray::onReloadSettings()
 {
     settings.sync();
-    if (settings.value("app/updatekeyrings", true).toBool()) {
+    if (settings.value("application/updatekeyrings", true).toBool()) {
         if (!package_timer.isActive())
             package_timer.start(KEYRING_FIRST_CHECK_TIME);
     } else
         package_timer.stop();
-    if (settings.value("app/notifyforum", true).toBool()) {
+    if (settings.value("application/notifyforum", true).toBool()) {
         if (!forum_timer.isActive())
             // For now we can just use the same time here, doesn't matter.
             forum_timer.start(KEYRING_FIRST_CHECK_TIME);

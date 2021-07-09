@@ -7,9 +7,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
-    ui->updateKeyrings->setChecked(settings.value("app/updatekeyrings", true).toBool());
-    ui->updateHotfixes->setChecked(settings.value("app/updatehotfixes", true).toBool());
-    ui->notifyForum->setChecked(settings.value("app/notifyforum", true).toBool());
+    ui->updateKeyrings->setChecked(settings.value("application/updatekeyrings", true).toBool());
+    ui->updateHotfixes->setChecked(settings.value("application/updatehotfixes", true).toBool());
+    ui->notifyForum->setChecked(settings.value("application/notifyforum", true).toBool());
 }
 
 SettingsDialog::~SettingsDialog()
@@ -25,9 +25,9 @@ void SettingsDialog::on_buttonBox_rejected()
 
 void SettingsDialog::on_buttonBox_accepted()
 {
-    settings.setValue("app/updatekeyrings", ui->updateKeyrings->isChecked());
-    settings.setValue("app/updatehotfixes", ui->updateHotfixes->isChecked());
-    settings.setValue("app/notifyforum", ui->notifyForum->isChecked());
+    settings.setValue("application/updatekeyrings", ui->updateKeyrings->isChecked());
+    settings.setValue("application/updatehotfixes", ui->updateHotfixes->isChecked());
+    settings.setValue("application/notifyforum", ui->notifyForum->isChecked());
     this->close();
 }
 
