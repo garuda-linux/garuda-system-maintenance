@@ -30,14 +30,15 @@ build() {
 
 package() {
     make -C build DESTDIR="$pkgdir" install
-    install -Dm0644 $pkgname.desktop "$pkgdir/etc/xdg/autostart/$pkgname.desktop"
-    install -Dm0644 $pkgname-settings.desktop "$pkgdir/usr/share/applications/$pkgname-settings.desktop"
     
     cd "$pkgname-$pkgver"
     install -Dm0755 update-packages "$pkgdir/usr/lib/$pkgname/update-packages"
     install -Dm0644 $pkgname.rules "$pkgdir/usr/share/polkit-1/rules.d/$pkgname.rules"
     install -Dm0644 $pkgname@.service "$pkgdir/etc/systemd/system/$pkgname@.service"
     install -Dm0644 $pkgname.notifyrc "$pkgdir/usr/share/knotifications5/$pkgname.notifyrc"
+    install -Dm0644 $pkgname.desktop "$pkgdir/etc/xdg/autostart/$pkgname.desktop"
+    install -Dm0644 $pkgname-settings.desktop "$pkgdir/usr/share/applications/$pkgname-settings.desktop"
+    install -Dm0644 garuda-system-maintenance.svg "$pkgdir/usr/share/pixmaps/garuda-system-maintenance.svg"
 
     # Fix permissions
     chmod -R 750 $pkgdir/usr/share/polkit-1/rules.d/
