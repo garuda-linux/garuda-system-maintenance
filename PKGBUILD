@@ -2,7 +2,7 @@
 
 pkgname=garuda-system-maintenance
 pkgver=1.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
@@ -11,11 +11,6 @@ depends=('qt5-base' 'garuda-hotfixes')
 makedepends=('qt5-tools' 'cmake' 'git' 'knotifications' 'polkit')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 md5sums=('SKIP')
-
-prepare() {
-    cd "$pkgname-$pkgver"
-    git submodule update --init --recursive
-}
 
 build() {
     cmake -B build -S "$pkgname-$pkgver" \
