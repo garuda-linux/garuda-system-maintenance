@@ -10,6 +10,9 @@
     <height>226</height>
    </rect>
   </property>
+  <property name="windowIcon">
+   <iconset theme="garuda-system-maintenance"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">

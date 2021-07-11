@@ -9,11 +9,8 @@ url="https://gitlab.com/garuda-linux/applications/$pkgname"
 license=('GPL')
 depends=('qt5-base' 'garuda-hotfixes')
 makedepends=('qt5-tools' 'cmake' 'git' 'knotifications' 'polkit')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz"
-        "$pkgname.desktop" "$pkgname-settings.desktop")
-md5sums=('SKIP'
-         'f760e1e4b3ffeee0d906b1ea9ec624a9'
-         '72dea6d352f623d7fc4b0f59ab53439d')
+source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+md5sums=('SKIP')
 
 prepare() {
     cd "$pkgname-$pkgver"
@@ -38,7 +35,7 @@ package() {
     install -Dm0644 $pkgname.notifyrc "$pkgdir/usr/share/knotifications5/$pkgname.notifyrc"
     install -Dm0644 $pkgname.desktop "$pkgdir/etc/xdg/autostart/$pkgname.desktop"
     install -Dm0644 $pkgname-settings.desktop "$pkgdir/usr/share/applications/$pkgname-settings.desktop"
-    install -Dm0644 garuda-system-maintenance.svg "$pkgdir/usr/share/pixmaps/garuda-system-maintenance.svg"
+    install -Dm0644 $pkgname.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname.svg"
 
     # Fix permissions
     chmod -R 750 $pkgdir/usr/share/polkit-1/rules.d/
