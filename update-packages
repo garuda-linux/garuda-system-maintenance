@@ -11,10 +11,26 @@ elif [ "$1" == "keyring" ]; then
     packages="archlinux-keyring chaotic-keyring"
 fi
 
-rm -r /tmp/garuda-system-maintenance/cache || true
-mkdir -p /tmp/garuda-system-maintenance/{db,cache}
-pacman -b /tmp/garuda-system-maintenance/db --cachedir /tmp/garuda-system-maintenance/cache --noconfirm -Sywdd $packages
-pushd /tmp/garuda-system-maintenance/cache
-SKIP_AUTOSNAP=1 pacman -U --noconfirm --needed !(*.sig)
+if [ -z "$packages" ]; then
+    exit 1
+fi
+
+tmpdir="$(mktemp -d garuda-system-maintenance-XXXXXXX --tmpdir)"
+trap 'rm -rf -- "$tmpdir"' EXIT
+
+mkdir -p "$tmpdir"/{db,cache}
+pacman -b "$tmpdir"/db --cachedir "$tmpdir"/cache --noconfirm -Sywdd $packages
+pushd "$tmpdir"/cache
+time=0
+while [ -e "/var/lib/pacman/db.lck" ];
+do
+    time=$((time+1))
+    # Try for 5 minutes
+    if (( time > 30 )); then
+        exit 1
+    fi
+    echo Waiting for db.lck $time
+    sleep 10
+done
+SKIP_AUTOSNAP=1 pacman -Udd --noconfirm --needed !(*.sig)
 popd
-rm -r /tmp/garuda-system-maintenance/{db,cache} || true

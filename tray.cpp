@@ -116,7 +116,6 @@ void Tray::checkUpdates()
         return;
     busy = true;
     auto process = new QProcess(this);
-    process->processEnvironment().insert("CHECKUPDATES_DB", "/tmp/garuda-system-maintenance/db");
     process->setProcessChannelMode(QProcess::MergedChannels);
 
     connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, process](int exitcode, QProcess::ExitStatus status) { onCheckUpdatesComplete(exitcode, status, process); });
