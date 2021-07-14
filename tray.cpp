@@ -2,19 +2,16 @@
 #include <KNotifications/KNotification>
 #include <QApplication>
 #include <QDateTime>
-#include <QDebug>
 #include <QDesktopServices>
+#include <QFile>
 #include <QFileSystemWatcher>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMenu>
 #include <QMessageBox>
-#include <QSystemTrayIcon>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
-#include <functional>
-#include <QFile>
 
 constexpr int KEYRING_FIRST_CHECK_TIME = 60 * 1000;
 constexpr int KEYRING_CHECK_TIME = 30 * 60 * 1000;
@@ -146,6 +143,8 @@ void Tray::onCheckUpdatesComplete(int exitcode, QProcess::ExitStatus status, QPr
         else
             package_timer.start(KEYRING_CHECK_TIME);
     }
+    else
+        package_timer.start(KEYRING_CHECK_TIME);
     process->deleteLater();
 }
 
@@ -179,9 +178,9 @@ void Tray::onShouldCheckPackages()
             network_manager->deleteLater();
         } else
             checkPackage("garuda-hotfixes", network_manager, [network_manager, this](bool needsupdate) {
-                if (needsupdate) {
+                if (needsupdate)
                     checkUpdates();
-                } else
+                else
                     package_timer.start(KEYRING_CHECK_TIME);
                 network_manager->deleteLater();
             });
@@ -235,8 +234,11 @@ void Tray::onCheckForum()
 void Tray::onReloadSettings()
 {
     settings.sync();
+    // There's some weird issue here that should like never matter tho
+    // If this is run during checkUpdates, the timer will be started with KEYRING_FIRST_CHECK_TIME instead of waiting for checkUpdates to finish.
+    // That's why the busy check is necessary here
     if (settings.value("application/updatekeyrings", true).toBool()) {
-        if (!package_timer.isActive())
+        if (!package_timer.isActive() && !busy)
             package_timer.start(KEYRING_FIRST_CHECK_TIME);
     } else
         package_timer.stop();

@@ -1,14 +1,14 @@
 # Maintainer: TNE <tne@garudalinux.org>
 
 pkgname=garuda-system-maintenance
-pkgver=1.1.1
+pkgver=1.1.2
 pkgrel=1
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
 license=('GPL')
-depends=('qt5-base' 'garuda-hotfixes')
-makedepends=('qt5-tools' 'cmake' 'git' 'knotifications' 'polkit')
+depends=('qt5-base' 'garuda-hotfixes' 'knotifications')
+makedepends=('qt5-tools' 'cmake' 'git' 'polkit')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 md5sums=('SKIP')
 
