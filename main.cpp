@@ -2,6 +2,9 @@
 
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QLockFile>
+#include <QStandardPaths>
+#include <QDir>
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +20,7 @@ int main(int argc, char *argv[])
     cmdline.process( a );
 
     QWidget *main;
+    QLockFile lock(QDir(QStandardPaths::writableLocation(QStandardPaths::RuntimeLocation)).absoluteFilePath("garuda-system-maintenance.lock"));
 
     if (cmdline.isSet(settings))
     {
@@ -24,6 +28,11 @@ int main(int argc, char *argv[])
         main->show();
     }
     else
-        main = new Tray;
+    {
+        if (lock.tryLock(1000))
+            main = new Tray;
+        else
+            return 1;
+    }
     return a.exec();
 }
