@@ -50,8 +50,8 @@ Tray::Tray(QWidget* parent)
     menu->addAction(keyringAction);
     menu->addAction(hotfixAction);
 
-    connect(keyringAction, &QAction::triggered, [this]() { updateKeyring(); });
-    connect(hotfixAction, &QAction::triggered, [this]() { updateKeyring(true); });
+    connect(keyringAction, &QAction::triggered, [this]() { updateKeyring(true); });
+    connect(hotfixAction, &QAction::triggered, [this]() { updateKeyring(false, true); });
 
     trayicon->setStatus(KStatusNotifierItem::Passive);
     trayicon->setAssociatedWidget(nullptr);
@@ -80,7 +80,7 @@ Tray::Tray(QWidget* parent)
     onReloadSettings();
 }
 
-void Tray::updateKeyring(bool hotfixes)
+void Tray::updateKeyring(bool keyring, bool hotfixes)
 {
     if (busy)
         return;
@@ -90,21 +90,28 @@ void Tray::updateKeyring(bool hotfixes)
     auto process = new QProcess(this);
     process->setProcessChannelMode(QProcess::MergedChannels);
 
-    connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, process, hotfixes](int exitcode, QProcess::ExitStatus status) { onKeyringsInstalled(exitcode, status, process, hotfixes); });
-
     if (hotfixes) {
-        QMessageBox dlg(QMessageBox::Warning, tr("Hotfix available!"), tr("Important hotfix update found. Do you want to apply the hotfix (recommended)?"), QMessageBox::Yes | QMessageBox::No, this);
-        dlg.setWindowFlags(dlg.windowFlags() | Qt::WindowStaysOnTopHint);
-        auto reply = dlg.exec();
-        if (reply == QMessageBox::Yes) {
-            process->start("systemctl", QStringList() << "start"
-                                                      << "garuda-system-maintenance@keyring-hotfixes.service");
-            return;
-        }
+        int reply = 0;
+        do {
+            QMessageBox dlg(QMessageBox::Warning, tr("Hotfix available!"), tr("Important hotfix update found. Do you want to apply the hotfix (recommended)?\nPress the help button to learn more about this hotfix."), QMessageBox::Yes | QMessageBox::No | QMessageBox::Help, this);
+            dlg.setWindowFlags(dlg.windowFlags() | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
+            reply = dlg.exec();
+            if (reply == QMessageBox::Yes) {
+                connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, process](int exitcode, QProcess::ExitStatus status) { onKeyringsInstalled(exitcode, status, process, true); });
+                process->start("systemctl", QStringList() << "start"
+                                                          << "garuda-system-maintenance@keyring-hotfixes.service");
+                return;
+            } else if (reply == QMessageBox::Help) {
+                QDesktopServices::openUrl(QString("https://forum.garudalinux.org/current-garuda-hotfix"));
+            }
+        } while (reply == QMessageBox::Help);
     }
-    trayicon->showMessage("Garuda System Maintenance", "Updating keyrings in the background...", "garuda-system-maintenance");
-    process->start("systemctl", QStringList() << "start"
+    if (keyring) {
+        trayicon->showMessage("Garuda System Maintenance", "Updating keyrings in the background...", "garuda-system-maintenance");
+        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, process](int exitcode, QProcess::ExitStatus status) { onKeyringsInstalled(exitcode, status, process, false); });
+        process->start("systemctl", QStringList() << "start"
                                               << "garuda-system-maintenance@keyring.service");
+    }
 }
 
 void Tray::checkUpdates()
@@ -136,10 +143,11 @@ void Tray::onCheckUpdatesComplete(int exitcode, QProcess::ExitStatus status, QPr
     busy = false;
     if (status == QProcess::ExitStatus::NormalExit && exitcode == 0) {
         auto output = process->readAllStandardOutput();
-        if (output.contains("garuda-hotfixes") && settings.value("application/updatehotfixes", true).toBool())
-            updateKeyring(true);
-        else if (output.contains("chaotic-keyring"))
-            updateKeyring();
+        bool keyring = output.contains("chaotic-keyring");
+        bool hotfixes = output.contains("garuda-hotfixes") && settings.value("application/updatehotfixes", true).toBool();
+
+        if (keyring || hotfixes)
+            updateKeyring(keyring, hotfixes);
         else
             package_timer.start(KEYRING_CHECK_TIME);
     }

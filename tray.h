@@ -19,7 +19,7 @@ class Tray : public QMainWindow {
 
     KStatusNotifierItem* trayicon = nullptr;
     QFileSystemWatcher* watcher = nullptr;
-    void updateKeyring(bool hotfixes = false);
+    void updateKeyring(bool keyring, bool hotfixes = false);
     void checkUpdates();
     void checkPackage(QString package, QNetworkAccessManager *mgr, std::function<void(bool success)> next);
     bool busy = false;
