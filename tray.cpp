@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
+#include <QVersionNumber>
 
 constexpr int KEYRING_FIRST_CHECK_TIME = 60 * 1000;
 constexpr int KEYRING_CHECK_TIME = 30 * 60 * 1000;
@@ -23,6 +24,28 @@ inline void swap(QJsonValueRef v1, QJsonValueRef v2)
     QJsonValue temp(v1);
     v1 = QJsonValue(v2);
     v2 = temp;
+}
+
+class Checkupdates_data
+{
+public:
+    QString old_version;
+    QString new_version;
+};
+
+inline static QMap<QString, Checkupdates_data> parseCheckupdates(QString input)
+{
+    QMap<QString, Checkupdates_data> map;
+
+    auto lines = input.splitRef("\n");
+    for (const auto &line : lines)
+    {
+        if (line.isEmpty())
+            continue;
+        auto words = line.split(" ");
+        map[words[0].toString()] = { words[1].toString(), words[3].toString() };
+    }
+    return map;
 }
 
 Tray::Tray(QWidget* parent)
@@ -142,9 +165,18 @@ void Tray::onCheckUpdatesComplete(int exitcode, QProcess::ExitStatus status, QPr
 {
     busy = false;
     if (status == QProcess::ExitStatus::NormalExit && exitcode == 0) {
-        auto output = process->readAllStandardOutput();
-        bool keyring = output.contains("chaotic-keyring");
-        bool hotfixes = output.contains("garuda-hotfixes") && settings.value("application/updatehotfixes", true).toBool();
+        auto parsed = parseCheckupdates(QString::fromUtf8(process->readAllStandardOutput()));
+        bool keyring = parsed.contains("chaotic-keyring") || parsed.contains("archlinux-keyring");
+        bool hotfixes = false;
+        if (settings.value("application/updatehotfixes", true).toBool())
+        {
+             auto packageinfo = parsed.find("garuda-hotfixes");
+             if (packageinfo != parsed.end())
+             {
+                 if (QVersionNumber::commonPrefix(QVersionNumber::fromString(packageinfo->old_version), QVersionNumber::fromString(packageinfo->new_version)).segmentCount() < 2)
+                     hotfixes = true;
+             }
+        }
 
         if (keyring || hotfixes)
             updateKeyring(keyring, hotfixes);
