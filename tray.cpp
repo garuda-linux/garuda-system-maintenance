@@ -16,6 +16,8 @@
 
 constexpr int KEYRING_FIRST_CHECK_TIME = 60 * 1000;
 constexpr int KEYRING_CHECK_TIME = 30 * 60 * 1000;
+#define PARTIAL_UPGRADE_WATCH_FOLDER "/var/lib/garuda"
+#define PARTIAL_UPGRADE_PATH PARTIAL_UPGRADE_WATCH_FOLDER "/partial_upgrade"
 
 // https://bugreports.qt.io/browse/QTBUG-44944
 // https://stackoverflow.com/questions/54461719/sort-a-qjsonarray-by-one-of-its-child-elements/54461720
@@ -48,6 +50,33 @@ inline static QMap<QString, Checkupdates_data> parseCheckupdates(QString input)
     return map;
 }
 
+bool Tray::partialUpgrade() {
+    return settings.value("application/partialupgrade", true).toBool() && QFile::exists(PARTIAL_UPGRADE_PATH);
+}
+
+void Tray::showSettings() {
+    if (!dialog) {
+        dialog = new SettingsDialog(this);
+        connect(dialog, SIGNAL(destroyed()), this, SLOT(onReloadSettings()));
+        dialog->show();
+    } else
+        dialog->deleteLater();
+}
+
+void Tray::updateApplicationState()
+{
+    if (partialUpgrade())
+    {
+        trayicon->setIconByName("garuda-system-maintenance-alert");
+        trayicon->setStatus(KStatusNotifierItem::NeedsAttention);
+    }
+    else
+    {
+        trayicon->setIconByName("garuda-system-maintenance");
+        trayicon->setStatus(KStatusNotifierItem::Passive);
+    }
+}
+
 Tray::Tray(QWidget* parent)
     : QMainWindow(parent)
 {
@@ -57,7 +86,7 @@ Tray::Tray(QWidget* parent)
     }
 
     trayicon = new KStatusNotifierItem(this);
-    trayicon->setIconByName("garuda-system-maintenance");
+    updateApplicationState();
 
     QMenu* menu = trayicon->contextMenu();
 
@@ -69,22 +98,32 @@ Tray::Tray(QWidget* parent)
         QIcon::fromTheme("update"),
         "Force hotfix update",
         menu);
+    QAction* settingsAction = new QAction(
+        QIcon::fromTheme("garuda-system-maintenance"),
+        "Settings",
+        menu);
 
     menu->addAction(keyringAction);
     menu->addAction(hotfixAction);
+    menu->addSeparator();
+    menu->addAction(settingsAction);
 
     connect(keyringAction, &QAction::triggered, [this]() { updateKeyring(true); });
     connect(hotfixAction, &QAction::triggered, [this]() { updateKeyring(false, true); });
+    connect(settingsAction, &QAction::triggered, [this]() { showSettings(); });
 
-    trayicon->setStatus(KStatusNotifierItem::Passive);
     trayicon->setAssociatedWidget(nullptr);
     connect(trayicon, &KStatusNotifierItem::activateRequested, [this]() {
-        if (!dialog) {
-            dialog = new SettingsDialog(this);
-            connect(dialog, SIGNAL(destroyed()), this, SLOT(onReloadSettings()));
-            dialog->show();
-        } else
-            dialog->deleteLater();
+        if (partialUpgrade())
+        {
+            QMessageBox dlg(QMessageBox::Warning, tr("Partial upgrade detected"), tr("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported.\nPress help to learn more."), QMessageBox::Ok | QMessageBox::Help, this);
+            auto reply = dlg.exec();
+            if (reply == QMessageBox::Help) {
+                QDesktopServices::openUrl(QString("https://wiki.garudalinux.org/en/partial-upgrade"));
+            }
+        }
+        else
+            showSettings();
     });
 
     connect(&package_timer, &QTimer::timeout, this, &Tray::onShouldCheckPackages);
@@ -94,10 +133,33 @@ Tray::Tray(QWidget* parent)
 
     watcher = new QFileSystemWatcher(this);
     watcher->addPath(settings.fileName());
+    watcher->addPath(PARTIAL_UPGRADE_WATCH_FOLDER);
     connect(watcher, &QFileSystemWatcher::fileChanged, this, [this](const QString& path) {
         if (!watcher->files().contains(path) && QFile::exists(path))
             watcher->addPath(path);
-        onReloadSettings();
+        if (path == settings.fileName())
+            onReloadSettings();
+    });
+    connect(watcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString& path) {
+        updateApplicationState();
+        if (path == PARTIAL_UPGRADE_WATCH_FOLDER && partialUpgrade())
+        {
+            KNotification* notification = new KNotification("forum", KNotification::Persistent);
+            notification->setTitle("Partial upgrade detected");
+            notification->setText("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported.");
+            notification->setActions({ "Disable warnings", "Learn more" });
+            connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [this](unsigned int action) {
+                if (action == 1)
+                {
+                    settings.setValue("application/partialupgrade", false);
+                }
+                else
+                {
+                    QDesktopServices::openUrl(QUrl("https://wiki.garudalinux.org/en/partial-upgrade"));
+                }
+            });
+            notification->sendEvent();
+        }
     });
 
     onReloadSettings();
@@ -274,6 +336,7 @@ void Tray::onCheckForum()
 void Tray::onReloadSettings()
 {
     settings.sync();
+    updateApplicationState();
     // There's some weird issue here that should like never matter tho
     // If this is run during checkUpdates, the timer will be started with KEYRING_FIRST_CHECK_TIME instead of waiting for checkUpdates to finish.
     // That's why the busy check is necessary here

@@ -1,7 +1,7 @@
 # Maintainer: TNE <tne@garudalinux.org>
 
 pkgname=garuda-system-maintenance
-pkgver=1.3.0
+pkgver=1.4.0
 pkgrel=1
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
@@ -32,6 +32,7 @@ package() {
     install -Dm0644 $pkgname.desktop "$pkgdir/etc/xdg/autostart/$pkgname.desktop"
     install -Dm0644 $pkgname-settings.desktop "$pkgdir/usr/share/applications/$pkgname-settings.desktop"
     install -Dm0644 $pkgname.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname.svg"
+    install -Dm0644 $pkgname-alert.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname-alert.svg"
 
     # Fix permissions
     chmod -R 750 $pkgdir/usr/share/polkit-1/rules.d/

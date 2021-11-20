@@ -70,6 +70,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="notifyPartialUpgrade">
+        <property name="text">
+         <string>Notify about partial upgrades</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

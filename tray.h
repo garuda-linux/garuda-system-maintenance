@@ -22,6 +22,9 @@ class Tray : public QMainWindow {
     void updateKeyring(bool keyring, bool hotfixes = false);
     void checkUpdates();
     void checkPackage(QString package, QNetworkAccessManager *mgr, std::function<void(bool success)> next);
+    void showSettings();
+    void updateApplicationState();
+    bool partialUpgrade();
     bool busy = false;
 
     QTimer package_timer;
@@ -29,7 +32,6 @@ class Tray : public QMainWindow {
     QSettings settings;
 
     QPointer<SettingsDialog> dialog = nullptr;
-
 private slots:
     void onKeyringsInstalled(int, QProcess::ExitStatus, QProcess* process, bool hotfix);
     void onCheckUpdatesComplete(int, QProcess::ExitStatus, QProcess* process);

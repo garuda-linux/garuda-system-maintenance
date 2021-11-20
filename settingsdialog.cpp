@@ -10,6 +10,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->updateKeyrings->setChecked(settings.value("application/updatekeyrings", true).toBool());
     ui->updateHotfixes->setChecked(settings.value("application/updatehotfixes", true).toBool());
     ui->notifyForum->setChecked(settings.value("application/notifyforum", true).toBool());
+    ui->notifyPartialUpgrade->setChecked(settings.value("application/partialupgrade", true).toBool());
 }
 
 SettingsDialog::~SettingsDialog()
@@ -28,6 +29,7 @@ void SettingsDialog::on_buttonBox_accepted()
     settings.setValue("application/updatekeyrings", ui->updateKeyrings->isChecked());
     settings.setValue("application/updatehotfixes", ui->updateHotfixes->isChecked());
     settings.setValue("application/notifyforum", ui->notifyForum->isChecked());
+    settings.setValue("application/partialupgrade", ui->notifyPartialUpgrade->isChecked());
     this->close();
 }
 
