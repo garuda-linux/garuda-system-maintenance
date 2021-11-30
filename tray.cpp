@@ -10,9 +10,9 @@
 #include <QJsonObject>
 #include <QMenu>
 #include <QMessageBox>
+#include <QVersionNumber>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
-#include <QVersionNumber>
 
 constexpr int KEYRING_FIRST_CHECK_TIME = 60 * 1000;
 constexpr int KEYRING_CHECK_TIME = 30 * 60 * 1000;
@@ -28,8 +28,7 @@ inline void swap(QJsonValueRef v1, QJsonValueRef v2)
     v2 = temp;
 }
 
-class Checkupdates_data
-{
+class Checkupdates_data {
 public:
     QString old_version;
     QString new_version;
@@ -40,8 +39,7 @@ inline static QMap<QString, Checkupdates_data> parseCheckupdates(QString input)
     QMap<QString, Checkupdates_data> map;
 
     auto lines = input.splitRef("\n");
-    for (const auto &line : lines)
-    {
+    for (const auto& line : lines) {
         if (line.isEmpty())
             continue;
         auto words = line.split(" ");
@@ -50,11 +48,13 @@ inline static QMap<QString, Checkupdates_data> parseCheckupdates(QString input)
     return map;
 }
 
-bool Tray::partialUpgrade() {
+bool Tray::partialUpgrade()
+{
     return settings.value("application/partialupgrade", true).toBool() && QFile::exists(PARTIAL_UPGRADE_PATH);
 }
 
-void Tray::showSettings() {
+void Tray::showSettings()
+{
     if (!dialog) {
         dialog = new SettingsDialog(this);
         connect(dialog, SIGNAL(destroyed()), this, SLOT(onReloadSettings()));
@@ -65,13 +65,10 @@ void Tray::showSettings() {
 
 void Tray::updateApplicationState()
 {
-    if (partialUpgrade())
-    {
+    if (partialUpgrade()) {
         trayicon->setIconByName("garuda-system-maintenance-alert");
         trayicon->setStatus(KStatusNotifierItem::NeedsAttention);
-    }
-    else
-    {
+    } else {
         trayicon->setIconByName("garuda-system-maintenance");
         trayicon->setStatus(KStatusNotifierItem::Passive);
     }
@@ -114,15 +111,13 @@ Tray::Tray(QWidget* parent)
 
     trayicon->setAssociatedWidget(nullptr);
     connect(trayicon, &KStatusNotifierItem::activateRequested, [this]() {
-        if (partialUpgrade())
-        {
+        if (partialUpgrade()) {
             QMessageBox dlg(QMessageBox::Warning, tr("Partial upgrade detected"), tr("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported.\nPress help to learn more."), QMessageBox::Ok | QMessageBox::Help, this);
             auto reply = dlg.exec();
             if (reply == QMessageBox::Help) {
                 QDesktopServices::openUrl(QString("https://wiki.garudalinux.org/en/partial-upgrade"));
             }
-        }
-        else
+        } else
             showSettings();
     });
 
@@ -141,25 +136,23 @@ Tray::Tray(QWidget* parent)
             onReloadSettings();
     });
     connect(watcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString& path) {
-        updateApplicationState();
-        if (path == PARTIAL_UPGRADE_WATCH_FOLDER && partialUpgrade())
-        {
-            KNotification* notification = new KNotification("forum", KNotification::Persistent);
-            notification->setTitle("Partial upgrade detected");
-            notification->setText("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported.");
-            notification->setActions({ "Disable warnings", "Learn more" });
-            connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [this](unsigned int action) {
-                if (action == 1)
-                {
-                    settings.setValue("application/partialupgrade", false);
-                }
-                else
-                {
-                    QDesktopServices::openUrl(QUrl("https://wiki.garudalinux.org/en/partial-upgrade"));
-                }
-            });
-            notification->sendEvent();
-        }
+        QTimer::singleShot(1000, this, [this, path]() {
+            updateApplicationState();
+            if (path == PARTIAL_UPGRADE_WATCH_FOLDER && partialUpgrade()) {
+                KNotification* notification = new KNotification("forum", KNotification::Persistent);
+                notification->setTitle("Partial upgrade detected");
+                notification->setText("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported.");
+                notification->setActions({ "Disable warnings", "Learn more" });
+                connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [this](unsigned int action) {
+                    if (action == 1) {
+                        settings.setValue("application/partialupgrade", false);
+                    } else {
+                        QDesktopServices::openUrl(QUrl("https://wiki.garudalinux.org/en/partial-upgrade"));
+                    }
+                });
+                notification->sendEvent();
+            }
+        });
     });
 
     onReloadSettings();
@@ -195,7 +188,7 @@ void Tray::updateKeyring(bool keyring, bool hotfixes)
         trayicon->showMessage("Garuda System Maintenance", "Updating keyrings in the background...", "garuda-system-maintenance");
         connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, process](int exitcode, QProcess::ExitStatus status) { onKeyringsInstalled(exitcode, status, process, false); });
         process->start("systemctl", QStringList() << "start"
-                                              << "garuda-system-maintenance@keyring.service");
+                                                  << "garuda-system-maintenance@keyring.service");
     }
 }
 
@@ -230,22 +223,19 @@ void Tray::onCheckUpdatesComplete(int exitcode, QProcess::ExitStatus status, QPr
         auto parsed = parseCheckupdates(QString::fromUtf8(process->readAllStandardOutput()));
         bool keyring = parsed.contains("chaotic-keyring") || parsed.contains("archlinux-keyring");
         bool hotfixes = false;
-        if (settings.value("application/updatehotfixes", true).toBool())
-        {
-             auto packageinfo = parsed.find("garuda-hotfixes");
-             if (packageinfo != parsed.end())
-             {
-                 if (QVersionNumber::commonPrefix(QVersionNumber::fromString(packageinfo->old_version), QVersionNumber::fromString(packageinfo->new_version)).segmentCount() < 2)
-                     hotfixes = true;
-             }
+        if (settings.value("application/updatehotfixes", true).toBool()) {
+            auto packageinfo = parsed.find("garuda-hotfixes");
+            if (packageinfo != parsed.end()) {
+                if (QVersionNumber::commonPrefix(QVersionNumber::fromString(packageinfo->old_version), QVersionNumber::fromString(packageinfo->new_version)).segmentCount() < 2)
+                    hotfixes = true;
+            }
         }
 
         if (keyring || hotfixes)
             updateKeyring(keyring, hotfixes);
         else
             package_timer.start(KEYRING_CHECK_TIME);
-    }
-    else
+    } else
         package_timer.start(KEYRING_CHECK_TIME);
     process->deleteLater();
 }
