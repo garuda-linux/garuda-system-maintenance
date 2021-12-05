@@ -1,15 +1,17 @@
-#include "tray.h"
+﻿#include "tray.h"
 #include <KNotifications/KNotification>
 #include <QApplication>
 #include <QDateTime>
 #include <QDesktopServices>
 #include <QFile>
+#include <QFileInfo>
 #include <QFileSystemWatcher>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMenu>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QVersionNumber>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
@@ -18,6 +20,7 @@ constexpr int KEYRING_FIRST_CHECK_TIME = 60 * 1000;
 constexpr int KEYRING_CHECK_TIME = 30 * 60 * 1000;
 #define PARTIAL_UPGRADE_WATCH_FOLDER "/var/lib/garuda"
 #define PARTIAL_UPGRADE_PATH PARTIAL_UPGRADE_WATCH_FOLDER "/partial_upgrade"
+#define LAST_UPDATE_PATH PARTIAL_UPGRADE_WATCH_FOLDER "/last_update"
 
 // https://bugreports.qt.io/browse/QTBUG-44944
 // https://stackoverflow.com/questions/54461719/sort-a-qjsonarray-by-one-of-its-child-elements/54461720
@@ -53,6 +56,32 @@ bool Tray::partialUpgrade()
     return settings.value("application/partialupgrade", true).toBool() && QFile::exists(PARTIAL_UPGRADE_PATH);
 }
 
+bool Tray::isSystemCriticallyOutOfDate()
+{
+    if (!settings.value("application/outofdate", true).toBool())
+        return false;
+
+    auto update_file = QFileInfo(LAST_UPDATE_PATH);
+    if (!update_file.exists())
+        return false;
+    auto timestamp = update_file.lastModified().toUTC();
+    if (timestamp.daysTo(QDateTime::currentDateTimeUtc()) >= 13) {
+        if (settings.contains("timestamps/systemupdate")) {
+            if (settings.value("timestamps/systemupdate").toDateTime().daysTo(QDateTime::currentDateTimeUtc()) >= 2)
+                return true;
+        } else
+            settings.setValue("timestamps/systemupdate", QDateTime::currentDateTimeUtc());
+    } else {
+        settings.remove("timestamps/systemupdate");
+    }
+    return false;
+}
+
+void Tray::launchSystemUpdate()
+{
+    QProcess::startDetached("/usr/lib/garuda/launch-terminal", QStringList() << "update; read -p 'Press enter to exit'");
+}
+
 void Tray::showSettings()
 {
     if (!dialog) {
@@ -65,7 +94,7 @@ void Tray::showSettings()
 
 void Tray::updateApplicationState()
 {
-    if (partialUpgrade()) {
+    if (partialUpgrade() || (isSystemCriticallyOutOfDate() && settings.contains("timestamps/systemupdate-alert"))) {
         trayicon->setIconByName("garuda-system-maintenance-alert");
         trayicon->setStatus(KStatusNotifierItem::NeedsAttention);
     } else {
@@ -83,7 +112,6 @@ Tray::Tray(QWidget* parent)
     }
 
     trayicon = new KStatusNotifierItem(this);
-    updateApplicationState();
 
     QMenu* menu = trayicon->contextMenu();
 
@@ -111,11 +139,40 @@ Tray::Tray(QWidget* parent)
 
     trayicon->setAssociatedWidget(nullptr);
     connect(trayicon, &KStatusNotifierItem::activateRequested, [this]() {
-        if (partialUpgrade()) {
-            QMessageBox dlg(QMessageBox::Warning, tr("Partial upgrade detected"), tr("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported.\nPress help to learn more."), QMessageBox::Ok | QMessageBox::Help, this);
+        bool outofdate = isSystemCriticallyOutOfDate(), partial = false;
+        if (!outofdate)
+            partial = partialUpgrade();
+        if (outofdate || partial) {
+            QMessageBox dlg(this);
+            dlg.setWindowTitle(outofdate ? tr("System out of date") : tr("Partial upgrade detected"));
+            dlg.setText(outofdate ? tr("This system has not been updated in a long time.\nRegularly applying system updates on a rolling release distribution is highly encouraged to avoid various issues.") : tr("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported."));
+
+            dlg.addButton(QMessageBox::Cancel);
+
+            auto* apply = dlg.addButton(QMessageBox::Apply);
+            apply->setText(tr("Update system"));
+
+            QPushButton* learnmore = nullptr;
+            if (partial) {
+                learnmore = dlg.addButton(QMessageBox::Help);
+                learnmore->setText(tr("Learn more"));
+            }
+
+            auto* disablenotifications = dlg.addButton(QMessageBox::Ignore);
+            disablenotifications->setText(tr("Ignore permanently"));
+
             auto reply = dlg.exec();
-            if (reply == QMessageBox::Help) {
+            if (dlg.clickedButton() == nullptr)
+                return;
+            if (dlg.clickedButton() == learnmore) {
                 QDesktopServices::openUrl(QString("https://wiki.garudalinux.org/en/partial-upgrade"));
+            } else if (dlg.clickedButton() == apply) {
+                launchSystemUpdate();
+            } else if (dlg.clickedButton() == disablenotifications) {
+                if (outofdate)
+                    settings.setValue("application/outofdate", false);
+                else
+                    settings.setValue("application/partialupgrade", false);
             }
         } else
             showSettings();
@@ -142,13 +199,14 @@ Tray::Tray(QWidget* parent)
                 KNotification* notification = new KNotification("forum", KNotification::Persistent);
                 notification->setTitle("Partial upgrade detected");
                 notification->setText("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported.");
-                notification->setActions({ "Disable warnings", "Learn more" });
+                notification->setActions({ "Update system", "Learn more", "Disable warnings" });
                 connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [this](unsigned int action) {
-                    if (action == 1) {
+                    if (action == 3)
                         settings.setValue("application/partialupgrade", false);
-                    } else {
+                    else if (action == 1)
+                        launchSystemUpdate();
+                    else if (action == 2)
                         QDesktopServices::openUrl(QUrl("https://wiki.garudalinux.org/en/partial-upgrade"));
-                    }
                 });
                 notification->sendEvent();
             }
@@ -272,8 +330,27 @@ void Tray::onShouldCheckPackages()
             checkPackage("garuda-hotfixes", network_manager, [network_manager, this](bool needsupdate) {
                 if (needsupdate)
                     checkUpdates();
-                else
+                else {
                     package_timer.start(KEYRING_CHECK_TIME);
+                    if (isSystemCriticallyOutOfDate()) {
+                        if (settings.value("timestamps/systemupdate-alert", QDateTime::fromSecsSinceEpoch(9, Qt::UTC)).toDateTime().daysTo(QDateTime::currentDateTimeUtc()) > 2) {
+                            settings.setValue("timestamps/systemupdate-alert", QDateTime::currentDateTimeUtc());
+                            updateApplicationState();
+                            KNotification* notification = new KNotification("forum", KNotification::Persistent);
+                            notification->setTitle(tr("System out of date"));
+                            notification->setText(tr("This system has not been updated in a long time.\nRegularly applying system updates on a rolling release distribution is highly encouraged to avoid various issues."));
+                            notification->setActions({ "Update system", "Disable warnings" });
+                            connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [this](unsigned int action) {
+                                if (action == 2)
+                                    settings.setValue("application/outofdate", false);
+                                else if (action == 1)
+                                    launchSystemUpdate();
+                            });
+                            notification->sendEvent();
+                        }
+                    } else
+                        settings.remove("timestamps/systemupdate-alert");
+                }
                 network_manager->deleteLater();
             });
     });

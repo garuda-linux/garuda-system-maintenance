@@ -11,6 +11,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->updateHotfixes->setChecked(settings.value("application/updatehotfixes", true).toBool());
     ui->notifyForum->setChecked(settings.value("application/notifyforum", true).toBool());
     ui->notifyPartialUpgrade->setChecked(settings.value("application/partialupgrade", true).toBool());
+    ui->notifyOutOfDate->setChecked(settings.value("application/outofdate", true).toBool());
 }
 
 SettingsDialog::~SettingsDialog()
@@ -30,6 +31,7 @@ void SettingsDialog::on_buttonBox_accepted()
     settings.setValue("application/updatehotfixes", ui->updateHotfixes->isChecked());
     settings.setValue("application/notifyforum", ui->notifyForum->isChecked());
     settings.setValue("application/partialupgrade", ui->notifyPartialUpgrade->isChecked());
+    settings.setValue("application/outofdate", ui->notifyOutOfDate->isChecked());
     this->close();
 }
 

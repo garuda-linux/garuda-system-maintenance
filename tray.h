@@ -25,6 +25,8 @@ class Tray : public QMainWindow {
     void showSettings();
     void updateApplicationState();
     bool partialUpgrade();
+    bool isSystemCriticallyOutOfDate();
+    void launchSystemUpdate();
     bool busy = false;
 
     QTimer package_timer;

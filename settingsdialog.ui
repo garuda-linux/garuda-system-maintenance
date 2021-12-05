@@ -77,6 +77,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="notifyOutOfDate">
+        <property name="text">
+         <string>Notify if system is critically out of date</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
