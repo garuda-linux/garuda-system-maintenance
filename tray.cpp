@@ -51,7 +51,7 @@ inline static QMap<QString, Checkupdates_data> parseCheckupdates(QString input)
     return map;
 }
 
-bool Tray::partialUpgrade()
+bool Tray::isPartiallyUpgraded()
 {
     return settings.value("application/partialupgrade", true).toBool() && QFile::exists(PARTIAL_UPGRADE_PATH);
 }
@@ -79,7 +79,7 @@ bool Tray::isSystemCriticallyOutOfDate()
 
 void Tray::launchSystemUpdate()
 {
-    QProcess::startDetached("/usr/lib/garuda/launch-terminal", QStringList() << "update; read -p 'Press enter to exit'");
+    QProcess::startDetached("/usr/lib/garuda/launch-terminal", QStringList() << "garuda-update; read -p 'Press enter to exit'");
 }
 
 void Tray::showSettings()
@@ -94,7 +94,7 @@ void Tray::showSettings()
 
 void Tray::updateApplicationState()
 {
-    if (partialUpgrade() || (isSystemCriticallyOutOfDate() && settings.contains("timestamps/systemupdate-alert"))) {
+    if (isPartiallyUpgraded() || (isSystemCriticallyOutOfDate() && settings.contains("timestamps/systemupdate-alert"))) {
         trayicon->setIconByName("garuda-system-maintenance-alert");
         trayicon->setStatus(KStatusNotifierItem::NeedsAttention);
     } else {
@@ -141,7 +141,7 @@ Tray::Tray(QWidget* parent)
     connect(trayicon, &KStatusNotifierItem::activateRequested, [this]() {
         bool outofdate = isSystemCriticallyOutOfDate(), partial = false;
         if (!outofdate)
-            partial = partialUpgrade();
+            partial = isPartiallyUpgraded();
         if (outofdate || partial) {
             QMessageBox dlg(this);
             dlg.setWindowTitle(outofdate ? tr("System out of date") : tr("Partial upgrade detected"));
@@ -183,6 +183,12 @@ Tray::Tray(QWidget* parent)
     connect(&forum_timer, &QTimer::timeout, this, &Tray::onCheckForum);
     forum_timer.setSingleShot(true);
 
+    // On boot up, check if we have any old snapshots/restore backups that we should tell the user to remove
+    if (settings.value("application/oldsnapshot", true).toBool())
+        QTimer::singleShot(30 * 1000, this, [this]() {
+            onCheckOldSnapshots();
+        });
+
     watcher = new QFileSystemWatcher(this);
     watcher->addPath(settings.fileName());
     watcher->addPath(PARTIAL_UPGRADE_WATCH_FOLDER);
@@ -195,7 +201,7 @@ Tray::Tray(QWidget* parent)
     connect(watcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString& path) {
         QTimer::singleShot(1000, this, [this, path]() {
             updateApplicationState();
-            if (path == PARTIAL_UPGRADE_WATCH_FOLDER && partialUpgrade()) {
+            if (path == PARTIAL_UPGRADE_WATCH_FOLDER && isPartiallyUpgraded()) {
                 KNotification* notification = new KNotification("forum", KNotification::Persistent);
                 notification->setTitle("Partial upgrade detected");
                 notification->setText("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported.");
@@ -398,6 +404,42 @@ void Tray::onCheckForum()
             }
             forum_timer.start(KEYRING_CHECK_TIME);
         });
+}
+
+void Tray::onCheckOldSnapshots()
+{
+    QProcess* process = new QProcess(this);
+    process->start("pkexec", { "snapper-tools", "find-old" });
+    connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, process](int exitcode, QProcess::ExitStatus status) {
+        process->deleteLater();
+        if (exitcode == 0) {
+            auto text = QString::fromUtf8(process->readAllStandardOutput());
+            KNotification* notification = new KNotification("forum", KNotification::Persistent);
+            notification->setTitle(tr("Old snapshots/backups found"));
+            notification->setText(tr("Old snapshots or snapshot restore backups have been found that are using up disk space.\n"));
+            notification->setActions({ "View and delete", "Disable warnings" });
+            connect(notification, QOverload<unsigned int>::of(&KNotification::activated), this, [this, text](unsigned int action) {
+                if (action == 2)
+                    settings.setValue("application/oldsnapshot", false);
+                else if (action == 1) {
+                    // KNotification doesn't like it if you create a blocking message box right away. So we just push it back onto the event loop.. I guess.
+                    QTimer::singleShot(0, this, [this, text]() {
+                        QMessageBox dlg(this);
+                        dlg.setWindowTitle(tr("Old snapshots"));
+                        dlg.setText(text);
+                        dlg.addButton(QMessageBox::Cancel);
+                        auto* apply = dlg.addButton(QMessageBox::Apply);
+                        apply->setText(tr("Delete"));
+                        dlg.exec();
+                        if (dlg.clickedButton() == apply) {
+                            QProcess::startDetached("pkexec", { "snapper-tools", "delete-old" });
+                        }
+                    });
+                }
+            });
+            notification->sendEvent();
+        }
+    });
 }
 
 void Tray::onReloadSettings()

@@ -7,11 +7,12 @@
     <x>0</x>
     <y>0</y>
     <width>450</width>
-    <height>226</height>
+    <height>274</height>
    </rect>
   </property>
   <property name="windowIcon">
-   <iconset theme="garuda-system-maintenance"/>
+   <iconset theme="garuda-system-maintenance">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -81,6 +82,13 @@
        <widget class="QCheckBox" name="notifyOutOfDate">
         <property name="text">
          <string>Notify if system is critically out of date</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="notifyOldSnapshot">
+        <property name="text">
+         <string>Notify about old snapshots</string>
         </property>
        </widget>
       </item>

@@ -3,4 +3,10 @@ polkit.addRule(function(action, subject) {
         (action.lookup("unit") == "garuda-system-maintenance@keyring.service" || action.lookup("unit") == "garuda-system-maintenance@keyring-hotfixes.service") && action.lookup("verb") == "start") {
         return polkit.Result.YES;
     }
+    if (action.id == "org.garuda.snapper-tools.pkexec.policy.find-old") {
+        if (subject.isInGroup("wheel"))
+            return polkit.Result.YES;
+        else
+            return polkit.Result.NO;
+    }
 });

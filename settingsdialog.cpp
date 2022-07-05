@@ -1,9 +1,9 @@
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
 
-SettingsDialog::SettingsDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SettingsDialog)
+SettingsDialog::SettingsDialog(QWidget* parent)
+    : QDialog(parent)
+    , ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -12,6 +12,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->notifyForum->setChecked(settings.value("application/notifyforum", true).toBool());
     ui->notifyPartialUpgrade->setChecked(settings.value("application/partialupgrade", true).toBool());
     ui->notifyOutOfDate->setChecked(settings.value("application/outofdate", true).toBool());
+    ui->notifyOldSnapshot->setChecked(settings.value("application/oldsnapshot", true).toBool());
 }
 
 SettingsDialog::~SettingsDialog()
@@ -24,7 +25,6 @@ void SettingsDialog::on_buttonBox_rejected()
     this->close();
 }
 
-
 void SettingsDialog::on_buttonBox_accepted()
 {
     settings.setValue("application/updatekeyrings", ui->updateKeyrings->isChecked());
@@ -32,12 +32,11 @@ void SettingsDialog::on_buttonBox_accepted()
     settings.setValue("application/notifyforum", ui->notifyForum->isChecked());
     settings.setValue("application/partialupgrade", ui->notifyPartialUpgrade->isChecked());
     settings.setValue("application/outofdate", ui->notifyOutOfDate->isChecked());
+    settings.setValue("application/oldsnapshot", ui->notifyOldSnapshot->isChecked());
     this->close();
 }
-
 
 void SettingsDialog::on_updateKeyrings_toggled(bool checked)
 {
     ui->updateHotfixes->setEnabled(checked);
 }
-

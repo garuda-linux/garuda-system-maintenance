@@ -1,13 +1,13 @@
 #ifndef TRAY_H
 #define TRAY_H
 
+#include "settingsdialog.h"
+#include <KNotifications/KStatusNotifierItem>
 #include <QMainWindow>
+#include <QPointer>
 #include <QProcess>
 #include <QSettings>
 #include <QTimer>
-#include <KNotifications/KStatusNotifierItem>
-#include <QPointer>
-#include "settingsdialog.h"
 
 class QSystemTrayIcon;
 class QNetworkAccessManager;
@@ -21,10 +21,10 @@ class Tray : public QMainWindow {
     QFileSystemWatcher* watcher = nullptr;
     void updateKeyring(bool keyring, bool hotfixes = false);
     void checkUpdates();
-    void checkPackage(QString package, QNetworkAccessManager *mgr, std::function<void(bool success)> next);
+    void checkPackage(QString package, QNetworkAccessManager* mgr, std::function<void(bool success)> next);
     void showSettings();
     void updateApplicationState();
-    bool partialUpgrade();
+    bool isPartiallyUpgraded();
     bool isSystemCriticallyOutOfDate();
     void launchSystemUpdate();
     bool busy = false;
@@ -39,6 +39,7 @@ private slots:
     void onCheckUpdatesComplete(int, QProcess::ExitStatus, QProcess* process);
     void onShouldCheckPackages();
     void onCheckForum();
+    void onCheckOldSnapshots();
     void onReloadSettings();
 
 public:
