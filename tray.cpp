@@ -1,4 +1,4 @@
-﻿#include "tray.h"
+#include "tray.h"
 #include <KNotifications/KNotification>
 #include <QApplication>
 #include <QDateTime>
@@ -409,7 +409,7 @@ void Tray::onCheckForum()
 void Tray::onCheckOldSnapshots()
 {
     QProcess* process = new QProcess(this);
-    process->start("pkexec", { "snapper-tools", "find-old" });
+    process->start("pkexec", { "/usr/bin/snapper-tools", "find-old" });
     connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, process](int exitcode, QProcess::ExitStatus status) {
         process->deleteLater();
         if (exitcode == 0) {
