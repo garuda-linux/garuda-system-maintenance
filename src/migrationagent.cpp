@@ -83,7 +83,7 @@ MigrationAgent::MigrationAgent(ManagerData& data)
 
     QSettings migration_data("garuda", "migrations");
 
-    if (migration_data.value("dr460nized", 0).toInt() <= 2) {
+    if (migration_data.value("dr460nized", 0).toInt() < 2) {
         auto menu = data.trayicon->contextMenu();
         auto actions = menu->actions();
         QAction* applyAction = new QAction(
