@@ -4,7 +4,7 @@
 set -e
 shopt -s extglob
 
-# Systemd replaces - with / for some reason... See %i man page entry for systemd.unit
+# Systemd replaces - with /, See %i man page entry for systemd.unit
 if [ "$1" == "keyring/hotfixes" ]; then
     packages="archlinux-keyring chaotic-keyring garuda-hotfixes"
 elif [ "$1" == "keyring" ]; then

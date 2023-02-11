@@ -1,12 +1,13 @@
+#include "settingsdialog.h"
 #include "tray.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QDir>
 #include <QLockFile>
 #include <QStandardPaths>
-#include <QDir>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     a.setApplicationName("garuda-system-maintenance");
@@ -14,21 +15,18 @@ int main(int argc, char *argv[])
     a.setApplicationDisplayName("Garuda System Maintenance");
 
     QCommandLineParser cmdline;
-    QCommandLineOption settings( "settings",
-                                    "Open Garuda System Maintenance settings" );
-    cmdline.addOption( settings );
-    cmdline.process( a );
+    QCommandLineOption settings("settings",
+        "Open Garuda System Maintenance settings");
+    cmdline.addOption(settings);
+    cmdline.process(a);
 
-    QWidget *main;
+    QWidget* main;
     QLockFile lock(QDir(QStandardPaths::writableLocation(QStandardPaths::RuntimeLocation)).absoluteFilePath("garuda-system-maintenance.lock"));
 
-    if (cmdline.isSet(settings))
-    {
+    if (cmdline.isSet(settings)) {
         main = new SettingsDialog;
         main->show();
-    }
-    else
-    {
+    } else {
         if (lock.tryLock(1000))
             main = new Tray;
         else

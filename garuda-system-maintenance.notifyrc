@@ -2,6 +2,6 @@
 IconName=garuda-system-maintenance
 Name=Garuda System Maintenance
 
-[Event/forum]
-Name=Forum announcement post
+[Event/general]
+Name=Garuda System Maintenance Notification
 Action=Popup

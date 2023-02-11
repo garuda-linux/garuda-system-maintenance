@@ -32,10 +32,26 @@ set(PROJECT_SOURCES
         main.cpp
         tray.cpp
         tray.h
-        settingsdialog.h
+        tray.ui
         settingsdialog.cpp
+        settingsdialog.h
         settingsdialog.ui
+        baseagent.h
+        agentmanager.cpp
+        agentmanager.h
+        forumagent.cpp
+        forumagent.h
+        packageagent.cpp
+        packageagent.h
+        updateagent.cpp
+        updateagent.h
+        snapshotagent.cpp
+        snapshotagent.h
+        migrationagent.cpp
+        migrationagent.h
+        ${TS_FILES}
 )
+list(TRANSFORM PROJECT_SOURCES PREPEND "src/")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(garuda-system-maintenance

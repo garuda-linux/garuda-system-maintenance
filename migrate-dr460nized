@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+[ "$(kreadconfig5 --key LookAndFeelPackage)" == "Sweetified Plasma" ] && [ "$(kreadconfig5 --key ColorScheme)" == "Sweet" ] && [ "$(kreadconfig5 --key widgetStyle)" == "kvantum-dark" ]
+[ -f ~/.config/autostart/org.kde.latte-dock.desktop ]
+[ -x /usr/bin/latte-dock ]
+
+# Check if we are actually interested in applying at all yet
+[ "$1" == "true" ] || exit 0
+
+backup=(kwinrc kcminputrc kdeglobals plasmarc ksplashrc kscreenlockerrc)
+for i in "${backup[@]}"; do
+    cp "$HOME/.config/$i" "$HOME/.config/$i.bak"
+done
+
+lookandfeeltool --resetLayout -a Dr460nized
+rm ~/.config/autostart/org.kde.latte-dock.desktop
+killall -SIGINT latte-dock

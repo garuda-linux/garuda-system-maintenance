@@ -26,6 +26,7 @@ package() {
     
     cd "$pkgname-$pkgver"
     install -Dm0755 update-packages "$pkgdir/usr/lib/$pkgname/update-packages"
+    install -Dm0755 migrate-dr460nized "$pkgdir/usr/lib/$pkgname/migrate-dr460nized"
     install -Dm0644 $pkgname.rules "$pkgdir/usr/share/polkit-1/rules.d/$pkgname.rules"
     install -Dm0644 $pkgname@.service "$pkgdir/etc/systemd/system/$pkgname@.service"
     install -Dm0644 $pkgname.notifyrc "$pkgdir/usr/share/knotifications5/$pkgname.notifyrc"
