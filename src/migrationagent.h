@@ -9,13 +9,12 @@ class MigrationAgent : public BaseAgent {
     bool once = false;
 
     void onCheckComplete(QSettings* migration_data, QProcess* process, int exitcode, QProcess::ExitStatus status);
+    void onActionClicked();
+    void createPrompt(QSettings* migration_data);
 
 public:
     void onRoutine() override;
-    MigrationAgent(ManagerData& data)
-        : BaseAgent(data)
-    {
-    }
+    MigrationAgent(ManagerData& data);
 };
 
 #endif // MIGRATIONAGENT_H
