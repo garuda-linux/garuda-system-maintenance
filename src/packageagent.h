@@ -13,11 +13,7 @@ class PackageAgent : public BaseAgent {
 
 public:
     void onRoutine() override;
-    PackageAgent(ManagerData& data)
-        : BaseAgent(data)
-        , trayicon(data.trayicon)
-    {
-    }
+    PackageAgent(ManagerData& data);
 
 private:
     bool busy = false;

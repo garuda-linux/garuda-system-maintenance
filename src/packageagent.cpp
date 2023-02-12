@@ -1,7 +1,10 @@
 #include "packageagent.h"
 
+#include <KNotifications/KStatusNotifierItem>
 #include <KNotifications/kstatusnotifieritem.h>
+#include <QAction>
 #include <QDesktopServices>
+#include <QMenu>
 #include <QMessageBox>
 #include <QVersionNumber>
 #include <QtNetwork/QNetworkAccessManager>
@@ -11,6 +14,36 @@ void PackageAgent::onRoutine()
 {
     if (!busy && settings.value("application/updatekeyrings", true).toBool())
         onShouldCheckPackages();
+}
+
+PackageAgent::PackageAgent(ManagerData& data)
+    : BaseAgent(data)
+    , trayicon(data.trayicon)
+{
+    auto menu = data.trayicon->contextMenu();
+    auto actions = menu->actions();
+    QAction* keyringAction = new QAction(
+        QIcon::fromTheme("update"),
+        "Update keyring",
+        menu);
+    QAction* hotfixAction = new QAction(
+        QIcon::fromTheme("update"),
+        "Force hotfix update",
+        menu);
+    connect(keyringAction, &QAction::triggered, this, [this]() {
+        if (busy)
+            return;
+        busy = true;
+        updateKeyring(true, false);
+    });
+    connect(hotfixAction, &QAction::triggered, this, [this]() {
+        if (busy)
+            return;
+        busy = true;
+        updateKeyring(false, true);
+    });
+
+    menu->insertActions(actions.back(), { keyringAction, hotfixAction });
 }
 
 struct Checkupdates_data {
