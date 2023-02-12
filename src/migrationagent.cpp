@@ -88,7 +88,7 @@ MigrationAgent::MigrationAgent(ManagerData& data)
         auto actions = menu->actions();
         QAction* applyAction = new QAction(
             QIcon::fromTheme("update"),
-            "Dr460nized migration",
+            tr("Dr460nized migration"),
             menu);
         connect(applyAction, &QAction::triggered, this, &MigrationAgent::onActionClicked);
         menu->insertAction(actions.back(), applyAction);

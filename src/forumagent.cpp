@@ -60,9 +60,9 @@ void ForumAgent::onRoutine()
 void ForumAgent::showNotification(ForumData data)
 {
     KNotification* notification = new KNotification("general", KNotification::Persistent);
-    notification->setTitle("New maintenance announcement: " + data.title);
+    notification->setTitle(tr("New maintenance announcement: ") + data.title);
     notification->setText(data.content);
-    notification->setActions({ "Open in browser" });
+    notification->setActions({ tr("Open in browser") });
     QString& url = data.url;
     connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [url]() { QDesktopServices::openUrl(url); });
     notification->sendEvent();

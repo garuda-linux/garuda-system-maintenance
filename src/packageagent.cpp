@@ -53,7 +53,7 @@ void PackageAgent::updateKeyring(bool keyring, bool hotfixes)
             }
         } while (reply == QMessageBox::Help);
     } else if (keyring) {
-        trayicon->showMessage("Garuda System Maintenance", "Updating keyrings in the background...", "garuda-system-maintenance");
+        trayicon->showMessage(tr("Garuda System Maintenance"), tr("Updating keyrings in the background..."), "garuda-system-maintenance");
         connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, process](int exitcode, QProcess::ExitStatus status) { onKeyringsInstalled(exitcode, status, process, false); });
         process->start("systemctl", QStringList() << "start"
                                                   << "garuda-system-maintenance@keyring.service");
@@ -74,9 +74,9 @@ void PackageAgent::checkUpdates()
 void PackageAgent::onKeyringsInstalled(int exitcode, QProcess::ExitStatus status, QProcess* process, bool hotfix)
 {
     if (status == QProcess::ExitStatus::NormalExit && exitcode == 0) {
-        trayicon->showMessage("Garuda System Maintenance", hotfix ? "Hotfix successfully applied!" : "Keyrings successfully updated!", "garuda-system-maintenance");
+        trayicon->showMessage(tr("Garuda System Maintenance"), hotfix ? tr("Hotfix successfully applied!") : tr("Keyrings successfully updated!"), "garuda-system-maintenance");
     } else {
-        trayicon->showMessage("Garuda System Maintenance", hotfix ? "Hotfix failed!" : "Keyring update failed!", "garuda-system-maintenance");
+        trayicon->showMessage(tr("Garuda System Maintenance"), hotfix ? tr("Hotfix failed!") : tr("Keyring update failed!"), "garuda-system-maintenance");
     }
     busy = false;
     process->deleteLater();

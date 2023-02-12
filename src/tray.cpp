@@ -22,14 +22,6 @@ void Tray::setup()
 
     QMenu* menu = trayicon->contextMenu();
 
-    QAction* keyringAction = new QAction(
-        QIcon::fromTheme("update"),
-        "Update keyring",
-        menu);
-    QAction* hotfixAction = new QAction(
-        QIcon::fromTheme("update"),
-        "Force hotfix update",
-        menu);
     QAction* settingsAction = new QAction(
         QIcon::fromTheme("garuda-system-maintenance"),
         "Settings",

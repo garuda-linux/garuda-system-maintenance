@@ -24,8 +24,8 @@ void UpdateAgent::onRoutine()
             KNotification* notification = new KNotification("general", KNotification::Persistent);
             notification->setTitle(tr("System out of date"));
             notification->setText(tr("This system has not been updated in a long time.\nRegularly applying system updates on a rolling release distribution is highly encouraged to avoid various issues."));
-            notification->setActions({ "Update system", "Disable warnings" });
-            connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [this](unsigned int action) {
+            notification->setActions({ tr("Update system"), tr("Disable warnings") });
+            connect(notification, QOverload<unsigned int>::of(&KNotification::activated), this, [this](unsigned int action) {
                 if (action == 2)
                     settings.setValue("application/outofdate", false);
                 else if (action == 1)
@@ -66,7 +66,7 @@ UpdateAgent::UpdateAgent(ManagerData& data)
                 if (isPartiallyUpgraded()) {
                     KNotification* notification = new KNotification("general", KNotification::Persistent);
                     notification->setTitle("Partial upgrade detected");
-                    notification->setText("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported.");
+                    notification->setText("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial upgrades is unsupported.");
                     notification->setActions({ "Update system", "Learn more", "Disable warnings" });
                     connect(notification, QOverload<unsigned int>::of(&KNotification::activated), this, [this](unsigned int action) {
                         if (action == 3) {

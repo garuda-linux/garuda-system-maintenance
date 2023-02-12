@@ -23,7 +23,7 @@ void SnapshotAgent::onRoutine()
             KNotification* notification = new KNotification("general", KNotification::Persistent);
             notification->setTitle(tr("Old snapshots/backups found"));
             notification->setText(tr("Old snapshots or snapshot restore backups have been found that are using up disk space.\n"));
-            notification->setActions({ "View and delete", "Disable notifications" });
+            notification->setActions({ tr("View and delete"), tr("Disable notifications") });
             connect(notification, QOverload<unsigned int>::of(&KNotification::activated), this, [this](unsigned int action) {
                 if (action == 2)
                     disableWarnings();
