@@ -12,6 +12,10 @@ else
         cp "$HOME/.config/$i" "$HOME/.config/$i.bak"
     done
 
+    # Remove Kwin keys, this is not done by lookandfeeltool
+    sed -i 's&Meta=org.kde.plasmashell,/PlasmaShell,org.kde.PlasmaShell,activateLauncher&&g' kwinrc
+    sed -i 's&\[ModifierOnlyShortcuts\]&&g' kwinrc
+
     lookandfeeltool --resetLayout -a Dr460nized
     rm ~/.config/autostart/org.kde.latte-dock.desktop
     killall -SIGINT latte-dock
