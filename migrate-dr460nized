@@ -3,7 +3,7 @@
 set -e
 
 if [ "$1" != "true" ]; then
-    [ "$(kreadconfig5 --key LookAndFeelPackage)" == "Sweetified Plasma" ] && [ "$(kreadconfig5 --key ColorScheme)" == "Sweet" ] && [ "$(kreadconfig5 --key widgetStyle)" == "kvantum-dark" ]
+    [ "$(kreadconfig5 --key LookAndFeelPackage)" == "Sweetified Plasma" ] && [ "$(kreadconfig5 --key ColorScheme)" == "Sweetified" ] && [ "$(kreadconfig5 --key widgetStyle)" == "kvantum-dark" ]
     [ -f ~/.config/autostart/org.kde.latte-dock.desktop ]
     [ -x /usr/bin/latte-dock ]
 else
