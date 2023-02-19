@@ -13,8 +13,8 @@ else
     done
 
     # Remove Kwin keys, this is not done by lookandfeeltool
-    sed -i 's&Meta=org.kde.plasmashell,/PlasmaShell,org.kde.PlasmaShell,activateLauncher&&g' kwinrc
-    sed -i 's&\[ModifierOnlyShortcuts\]&&g' kwinrc
+    sed -i 's&Meta=org.kde.lattedock,/Latte,org.kde.LatteDock,activateLauncher&&g' kwinrc || true
+    sed -i 's&\[ModifierOnlyShortcuts\]&&g' kwinrc || true
 
     lookandfeeltool --resetLayout -a Dr460nized
     rm ~/.config/autostart/org.kde.latte-dock.desktop
