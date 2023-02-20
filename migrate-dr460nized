@@ -19,4 +19,5 @@ else
     lookandfeeltool --resetLayout -a Dr460nized
     rm ~/.config/autostart/org.kde.latte-dock.desktop
     killall -SIGINT latte-dock
+    systemctl --user restart plasma-plasmashell
 fi
