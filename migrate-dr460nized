@@ -16,6 +16,10 @@ else
     sed -i 's&Meta=org.kde.lattedock,/Latte,org.kde.LatteDock,activateLauncher&&g' kwinrc || true
     sed -i 's&\[ModifierOnlyShortcuts\]&&g' kwinrc || true
 
+    # Apply the new dr460nized fastfetch preset
+    sed -i 's/--load-config neofetch/--load-config dr460nized/g' ~/.config/fish/config.fish
+
+    # Apply the global theme & restart plasmashell gracefully
     lookandfeeltool --resetLayout -a Dr460nized
     rm ~/.config/autostart/org.kde.latte-dock.desktop
     killall -SIGINT latte-dock
