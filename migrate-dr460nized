@@ -13,8 +13,10 @@ else
     done
 
     # Remove Kwin keys, this is not done by lookandfeeltool
-    sed -i 's&Meta=org.kde.lattedock,/Latte,org.kde.LatteDock,activateLauncher&&g' kwinrc || true
-    sed -i 's&\[ModifierOnlyShortcuts\]&&g' kwinrc || true
+    sed -i 's&Meta=org.kde.lattedock,/Latte,org.kde.LatteDock,activateLauncher&&g' ~/.config/kwinrc || true
+    sed -i 's&\[ModifierOnlyShortcuts\]&&g' ~/.config/kwinrc || true
+    sed -i 's&ColorScheme=Sweetified&ColorScheme=Sweet&g' ~/.local/share/konsole/Garuda.profile || true
+
 
     # Apply the new dr460nized fastfetch preset
     sed -i 's/--load-config neofetch/--load-config dr460nized/g' ~/.config/fish/config.fish
