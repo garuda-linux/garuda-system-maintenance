@@ -2,7 +2,7 @@
 
 pkgname=garuda-system-maintenance
 pkgver=2.0.5
-pkgrel=1
+pkgrel=2
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
