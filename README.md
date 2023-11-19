@@ -1,6 +1,8 @@
 # Garuda Linux System Maintenance
 
+[![pipeline status](https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/badges/master/pipeline.svg)](https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/-/commits/master)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![Latest Release](https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/-/badges/release.svg)](https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/-/releases)
 
 ## Found any issue?
 
