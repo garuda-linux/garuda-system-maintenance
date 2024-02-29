@@ -1,7 +1,6 @@
 #include "packageagent.h"
 
 #include <KNotifications/KStatusNotifierItem>
-#include <KNotifications/kstatusnotifieritem.h>
 #include <QAction>
 #include <QDesktopServices>
 #include <QMenu>

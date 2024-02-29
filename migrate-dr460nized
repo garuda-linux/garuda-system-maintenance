@@ -1,11 +1,15 @@
 #!/bin/bash
 
-set -e
-
 if [ "$1" != "true" ]; then
-    [ "$(kreadconfig5 --key LookAndFeelPackage)" == "Sweetified Plasma" ] && [ "$(kreadconfig5 --key ColorScheme)" == "Sweetified" ] && [ "$(kreadconfig5 --key widgetStyle)" == "kvantum-dark" ]
-    [ -f ~/.config/autostart/org.kde.latte-dock.desktop ]
-    [ -x /usr/bin/latte-dock ]
+    LOOK_AND_FEEL="$(kreadconfig5 --key LookAndFeelPackage)"
+    if [ "$LOOK_AND_FEEL" == "Sweetified Plasma" ]; then
+        if [ "$(kreadconfig5 --key ColorScheme)" == "Sweetified" ] && [ "$(kreadconfig5 --key widgetStyle)" == "kvantum-dark" ] && [ -f ~/.config/autostart/org.kde.latte-dock.desktop ]; then
+            exit 0
+        fi
+    elif [ "$LOOK_AND_FEEL" == "Dr460nized" ]; then
+        exit 0
+    fi
+    exit 1
 else
     backup=(kwinrc kcminputrc kdeglobals plasmarc ksplashrc kscreenlockerrc)
     for i in "${backup[@]}"; do
@@ -14,16 +18,19 @@ else
 
     # Remove Kwin keys, this is not done by lookandfeeltool
     sed -i 's&Meta=org.kde.lattedock,/Latte,org.kde.LatteDock,activateLauncher&&g' ~/.config/kwinrc || true
-    sed -i 's&\[ModifierOnlyShortcuts\]&&g' ~/.config/kwinrc || true
     sed -i 's&ColorScheme=Sweetified&ColorScheme=Sweet&g' ~/.local/share/konsole/Garuda.profile || true
 
-
-    # Apply the new dr460nized fastfetch preset
-    sed -i 's/--load-config neofetch/--load-config dr460nized/g' ~/.config/fish/config.fish
+    if [ -f ~/.config/fish/config.fish ]; then
+        # Apply the new dr460nized fastfetch preset
+        sed -i 's/--load-config neofetch/--load-config dr460nized/g' ~/.config/fish/config.fish
+    fi
 
     # Apply the global theme & restart plasmashell gracefully
+    if [ -f ~/.config/autostart/org.kde.latte-dock.desktop ]; then
+        rm ~/.config/autostart/org.kde.latte-dock.desktop
+        killall -SIGINT latte-dock
+    fi
     lookandfeeltool --resetLayout -a Dr460nized
-    rm ~/.config/autostart/org.kde.latte-dock.desktop
-    killall -SIGINT latte-dock
+    sleep 5
     systemctl --user restart plasma-plasmashell
 fi

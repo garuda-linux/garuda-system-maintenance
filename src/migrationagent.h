@@ -15,6 +15,7 @@ class MigrationAgent : public BaseAgent {
 public:
     void onRoutine() override;
     MigrationAgent(ManagerData& data);
+    void trayIconClicked() override;
 };
 
 #endif // MIGRATIONAGENT_H

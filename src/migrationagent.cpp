@@ -1,42 +1,54 @@
 #include "migrationagent.h"
-#include <KNotifications/KStatusNotifierItem>
-#include <QDebug>
 #include <QDesktopServices>
-#include <QDir>
 #include <QFile>
 #include <QMenu>
 #include <QMessageBox>
 #include <QProcess>
-#include <QStandardPaths>
-#include <QTextStream>
+#include <QPushButton>
 #include <QUrl>
+#include <KNotifications/KStatusNotifierItem>
 
 #define START_SCRIPT "/usr/lib/garuda-system-maintenance/migrate-dr460nized"
-#define DR460NIZED_METADATA "/usr/share/plasma/look-and-feel/Dr460nized/metadata.desktop"
+#define DR460NIZED_METADATA "/usr/share/sddm/themes/Dr460nized"
 
 void helpArticle()
 {
-    QDesktopServices::openUrl(QString("https://wiki.garudalinux.org/en/dr460nized-migration"));
+    QDesktopServices::openUrl(QString("https://wiki.garudalinux.org/en/dr460nized-plasma6-migration"));
 }
 
 void MigrationAgent::createPrompt(QSettings* migration_data)
 {
-    int reply = 0;
+    bool help;
     do {
-        QMessageBox dlg(QMessageBox::Warning, tr("Dr460nized theme update required"), tr("KDE Plasma 5.27 is incompatible with latte-dock. A complete theme overhaul that tries to stay faithful to the original has been released and needs to be applied to keep your system working as intended. Backups of your old theme files will be created with the .bak extension. Click help to learn more."), QMessageBox::Yes | QMessageBox::No | QMessageBox::Help);
+        help = false;
+        QMessageBox dlg;
         dlg.setWindowFlags(dlg.windowFlags() | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
-        reply = dlg.exec();
-        if (reply == QMessageBox::Yes) {
+        dlg.setWindowTitle(tr("Dr460nized theme update available"));
+        dlg.setText(tr("KDE Plasma 6 and the accompanying Dr460nized theme version has been released! Some previous theme elements are unavailable, so re-applying the theme is necessary. Apply update now?"));
+        auto* cancel = dlg.addButton(QMessageBox::Cancel);
+        cancel->setText(tr("Later"));
+        auto* apply = dlg.addButton(QMessageBox::Apply);
+        auto* disablenotifications = dlg.addButton(QMessageBox::Ignore);
+        disablenotifications->setText(tr("Ignore permanently"));
+        auto* helpbutton = dlg.addButton(QMessageBox::Help);
+        helpbutton->setText(tr("More Info/Details"));
+        dlg.exec();
+        if (dlg.clickedButton() == apply) {
             auto process2 = new QProcess(this);
-            connect(process2, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [process2](int exitcode, QProcess::ExitStatus status) { helpArticle(); process2->deleteLater(); });
+            connect(process2, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [process2](int exitcode, QProcess::ExitStatus status) { process2->deleteLater(); });
             process2->start(START_SCRIPT, QStringList() << "true");
-            migration_data->setValue("dr460nized", 2);
-        } else if (reply == QMessageBox::No) {
-            migration_data->setValue("dr460nized", 1);
-        } else if (reply == QMessageBox::Help) {
+            migration_data->setValue("dr460nized", 4);
+            click_priority = 0;
+        } else if (dlg.clickedButton() == disablenotifications) {
+            migration_data->setValue("dr460nized", 3);
+            click_priority = 0;
+        } else if (dlg.clickedButton() == helpbutton) {
             helpArticle();
+            help = true;
+        } else {
+            click_priority = 2;
         }
-    } while (reply == QMessageBox::Help);
+    } while (help);
 }
 
 void MigrationAgent::onCheckComplete(QSettings* migration_data, QProcess* process, int exitcode, QProcess::ExitStatus status)
@@ -54,6 +66,11 @@ void MigrationAgent::onActionClicked()
     createPrompt(&migration_data);
 }
 
+void MigrationAgent::trayIconClicked()
+{
+    onActionClicked();
+}
+
 void MigrationAgent::onRoutine()
 {
     if (once)
@@ -61,7 +78,7 @@ void MigrationAgent::onRoutine()
     once = true;
 
     auto migration_data = new QSettings("garuda", "migrations");
-    if (migration_data->value("dr460nized", 0).toInt() > 0)
+    if (migration_data->value("dr460nized", 0).toInt() > 2)
         return;
 
     auto process = new QProcess(this);
@@ -75,7 +92,7 @@ MigrationAgent::MigrationAgent(ManagerData& data)
     : BaseAgent(data)
 {
     // This isn't actually dr460nized-next yet
-    if (qgetenv("XDG_CURRENT_DESKTOP") != "KDE" || !QFile::exists(DR460NIZED_METADATA)) {
+    if (qgetenv("KDE_SESSION_VERSION") != "6" || !QFile::exists(DR460NIZED_METADATA)) {
         // We don't want the routine to run either.
         once = true;
         return;
@@ -83,7 +100,7 @@ MigrationAgent::MigrationAgent(ManagerData& data)
 
     QSettings migration_data("garuda", "migrations");
 
-    if (migration_data.value("dr460nized", 0).toInt() < 2) {
+    if (migration_data.value("dr460nized", 0).toInt() < 4) {
         auto menu = data.trayicon->contextMenu();
         auto actions = menu->actions();
         QAction* applyAction = new QAction(
