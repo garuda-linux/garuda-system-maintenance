@@ -9,7 +9,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 
-void PackageAgent::onRoutine()
+void PackageAgent::onRoutine(bool init)
 {
     if (!busy && settings.value("application/updatekeyrings", true).toBool())
         onShouldCheckPackages();

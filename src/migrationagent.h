@@ -13,7 +13,7 @@ class MigrationAgent : public BaseAgent {
     void createPrompt(QSettings* migration_data);
 
 public:
-    void onRoutine() override;
+    void onRoutine(bool init) override;
     MigrationAgent(ManagerData& data);
     void trayIconClicked() override;
 };

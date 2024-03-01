@@ -11,10 +11,15 @@ AgentManager::AgentManager()
     timer = new QTimer();
 }
 
-void AgentManager::onRoutine()
+void AgentManager::onRoutine(QSettings *settings)
 {
+    bool init = false;
+    if (settings->value("application/version", 0) == 1) {
+        settings->setValue("application/version", 2);
+        init = true;
+    }
     for (auto& agent : agents)
-        agent->onRoutine();
+        agent->onRoutine(init);
 }
 
 BaseAgent* AgentManager::getHighestPriorityAgent()
@@ -50,9 +55,9 @@ void AgentManager::init(QSettings& settings, KStatusNotifierItem* trayicon, std:
     agents += new UpdateAgent(data);
     agents += new SnapshotAgent(data);
     agents += new MigrationAgent(data);
-    connect(timer, &QTimer::timeout, this, &AgentManager::onRoutine);
+    connect(timer, &QTimer::timeout, this, std::bind(&AgentManager::onRoutine, this, &settings));
     timer->start(15 * 60 * 1000);
-    QTimer::singleShot(30000, this, &AgentManager::onRoutine);
+    QTimer::singleShot(30000, this, std::bind(&AgentManager::onRoutine, this, &settings));
 }
 
 AgentManager::~AgentManager()

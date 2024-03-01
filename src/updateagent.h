@@ -9,7 +9,7 @@ class UpdateAgent : public BaseAgent {
     Q_OBJECT
 
 public:
-    void onRoutine() override;
+    void onRoutine(bool init) override;
     UpdateAgent(ManagerData& data);
     ~UpdateAgent();
     void trayIconClicked() override;

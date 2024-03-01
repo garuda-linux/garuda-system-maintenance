@@ -12,7 +12,7 @@ class PackageAgent : public BaseAgent {
     KStatusNotifierItem* trayicon;
 
 public:
-    void onRoutine() override;
+    void onRoutine(bool init) override;
     PackageAgent(ManagerData& data);
 
 private:

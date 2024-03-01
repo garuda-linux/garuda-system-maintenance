@@ -12,7 +12,7 @@ class SnapshotAgent : public BaseAgent {
     void disableWarnings();
 
 public:
-    void onRoutine() override;
+    void onRoutine(bool init) override;
     SnapshotAgent(ManagerData& data)
         : BaseAgent(data)
     {

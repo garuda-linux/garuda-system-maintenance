@@ -17,7 +17,7 @@ inline void swap(QJsonValueRef v1, QJsonValueRef v2)
     v2 = temp;
 }
 
-void ForumAgent::onRoutine()
+void ForumAgent::onRoutine(bool init)
 {
     if (!settings.value("application/notifyforum", true).toBool())
         return;

@@ -24,7 +24,7 @@ void MigrationAgent::createPrompt(QSettings* migration_data)
         QMessageBox dlg;
         dlg.setWindowFlags(dlg.windowFlags() | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
         dlg.setWindowTitle(tr("Dr460nized theme update available"));
-        dlg.setText(tr("KDE Plasma 6 and the accompanying Dr460nized theme version has been released! Some previous theme elements are unavailable, so re-applying the theme is necessary. Apply update now?"));
+        dlg.setText(tr("KDE Plasma 6 and the accompanying Dr460nized theme version has been released! Some previous theme elements are unavailable or have changed, therefore re-applying the theme is necessary. Apply update now? (This will remove any custom plasma theme configurations)"));
         auto* cancel = dlg.addButton(QMessageBox::Cancel);
         cancel->setText(tr("Later"));
         auto* apply = dlg.addButton(QMessageBox::Apply);
@@ -71,13 +71,17 @@ void MigrationAgent::trayIconClicked()
     onActionClicked();
 }
 
-void MigrationAgent::onRoutine()
+void MigrationAgent::onRoutine(bool init)
 {
     if (once)
         return;
     once = true;
 
     auto migration_data = new QSettings("garuda", "migrations");
+
+    if (init)
+        migration_data->setValue("dr460nized", 4);
+
     if (migration_data->value("dr460nized", 0).toInt() > 2)
         return;
 

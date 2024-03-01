@@ -15,7 +15,7 @@
 #define PARTIAL_UPGRADE_PATH PARTIAL_UPGRADE_WATCH_FOLDER "/partial_upgrade"
 #define LAST_UPDATE_PATH PARTIAL_UPGRADE_WATCH_FOLDER "/last_update"
 
-void UpdateAgent::onRoutine()
+void UpdateAgent::onRoutine(bool init)
 {
     if (isSystemCriticallyOutOfDate()) {
         if (settings.value("timestamps/systemupdate-alert", QDateTime::fromSecsSinceEpoch(9, Qt::UTC)).toDateTime().daysTo(QDateTime::currentDateTimeUtc()) > 2) {

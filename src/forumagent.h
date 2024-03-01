@@ -15,7 +15,7 @@ class ForumAgent : public BaseAgent {
     void showNotification(ForumData data);
 
 public:
-    void onRoutine() override;
+    void onRoutine(bool init) override;
     ForumAgent(ManagerData& data)
         : BaseAgent(data)
     {

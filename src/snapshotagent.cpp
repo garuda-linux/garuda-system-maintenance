@@ -7,7 +7,7 @@
 #include <QPushButton>
 #include <QTimer>
 
-void SnapshotAgent::onRoutine()
+void SnapshotAgent::onRoutine(bool init)
 {
     if (once || !settings.value("application/oldsnapshot", true).toBool())
         return;

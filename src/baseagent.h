@@ -54,7 +54,7 @@ public:
     {
         return;
     };
-    virtual void onRoutine() = 0;
+    virtual void onRoutine(bool init) = 0;
     virtual void onSettingsReloaded() {};
     ClickPriorityWrapper click_priority;
     virtual ~BaseAgent() {};

@@ -51,6 +51,13 @@ void Tray::setup()
             onReloadSettings();
     });
 
+    if (!settings.contains("application/version")) {
+        if (QFile::exists(settings.fileName()))
+            settings.setValue("application/version", 2);
+        else
+            settings.setValue("application/version", 1);
+    }
+
     manager.init(settings, trayicon, [this](int priority) {
         if (priority > 0) {
             trayicon->setStatus(KStatusNotifierItem::NeedsAttention);
