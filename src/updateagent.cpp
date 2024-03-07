@@ -1,6 +1,6 @@
 #include "updateagent.h"
 
-#include <KNotifications/KNotification>
+#include <KNotification>
 #include <QDateTime>
 #include <QDesktopServices>
 #include <QFile>
@@ -24,13 +24,10 @@ void UpdateAgent::onRoutine(bool init)
             KNotification* notification = new KNotification("general", KNotification::Persistent);
             notification->setTitle(tr("System out of date"));
             notification->setText(tr("This system has not been updated in a long time.\nRegularly applying system updates on a rolling release distribution is highly encouraged to avoid various issues."));
-            notification->setActions({ tr("Update system"), tr("Disable warnings") });
-            connect(notification, QOverload<unsigned int>::of(&KNotification::activated), this, [this](unsigned int action) {
-                if (action == 2)
-                    settings.setValue("application/outofdate", false);
-                else if (action == 1)
-                    launchSystemUpdate();
-            });
+            KNotificationAction *actionupdate = notification->addAction({ tr("Update system") });
+            KNotificationAction *actionignore = notification->addAction({ tr("Disable warnings") });
+            connect(actionupdate, &KNotificationAction::activated, this, [this]() { launchSystemUpdate(); });
+            connect(actionignore, &KNotificationAction::activated, this, [this]() { settings.setValue("application/partialupgrade", false); });
             notification->sendEvent();
         }
     } else if (settings.contains("timestamps/systemupdate-alert"))
@@ -67,15 +64,12 @@ UpdateAgent::UpdateAgent(ManagerData& data)
                     KNotification* notification = new KNotification("general", KNotification::Persistent);
                     notification->setTitle("Partial upgrade detected");
                     notification->setText("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial upgrades is unsupported.");
-                    notification->setActions({ "Update system", "Learn more", "Disable warnings" });
-                    connect(notification, QOverload<unsigned int>::of(&KNotification::activated), this, [this](unsigned int action) {
-                        if (action == 3) {
-                            settings.setValue("application/partialupgrade", false);
-                        } else if (action == 1)
-                            launchSystemUpdate();
-                        else if (action == 2)
-                            QDesktopServices::openUrl(QUrl("https://wiki.garudalinux.org/en/partial-upgrade"));
-                    });
+                    KNotificationAction *actionupdate = notification->addAction({ tr("Update system") });
+                    KNotificationAction *actionlearnmore = notification->addAction({ tr("Learn more") });
+                    KNotificationAction *actionignore = notification->addAction({ tr("Disable warnings") });
+                    connect(actionupdate, &KNotificationAction::activated, this, [this]() { launchSystemUpdate(); });
+                    connect(actionlearnmore, &KNotificationAction::activated, []() { QDesktopServices::openUrl(QUrl("https://wiki.garudalinux.org/en/partial-upgrade")); });
+                    connect(actionignore, &KNotificationAction::activated, this, [this]() { settings.setValue("application/partialupgrade", false); });
                     notification->sendEvent();
                 }
             }

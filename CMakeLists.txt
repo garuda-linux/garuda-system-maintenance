@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.28)
 
 project(garuda-system-maintenance VERSION 0.1 LANGUAGES CXX)
 
@@ -24,9 +24,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Network REQUIRED)
+find_package(QT NAMES Qt6 COMPONENTS Widgets Network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Network REQUIRED)
-find_package(KF5Notifications)
+find_package(KF6Notifications)
+find_package(KF6StatusNotifierItem)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -70,7 +71,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(garuda-system-maintenance PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network KF5::Notifications)
+target_link_libraries(garuda-system-maintenance PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network KF6::Notifications KF6::StatusNotifierItem)
 
 set_target_properties(garuda-system-maintenance PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

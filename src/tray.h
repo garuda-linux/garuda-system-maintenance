@@ -3,7 +3,7 @@
 
 #include "agentmanager.h"
 #include "settingsdialog.h"
-#include <KNotifications/KStatusNotifierItem>
+#include <KStatusNotifierItem>
 #include <QMainWindow>
 
 class QFileSystemWatcher;

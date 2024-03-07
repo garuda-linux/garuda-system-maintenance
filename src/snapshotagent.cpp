@@ -1,6 +1,6 @@
 #include "snapshotagent.h"
 
-#include <KNotifications/KNotification>
+#include <KNotification>
 #include <QDebug>
 #include <QMessageBox>
 #include <QProcess>
@@ -23,26 +23,24 @@ void SnapshotAgent::onRoutine(bool init)
             KNotification* notification = new KNotification("general", KNotification::Persistent);
             notification->setTitle(tr("Old snapshots/backups found"));
             notification->setText(tr("Old snapshots or snapshot restore backups have been found that are using up disk space.\n"));
-            notification->setActions({ tr("View and delete"), tr("Disable notifications") });
-            connect(notification, QOverload<unsigned int>::of(&KNotification::activated), this, [this](unsigned int action) {
-                if (action == 2)
-                    disableWarnings();
-                else if (action == 1) {
-                    // KNotification doesn't like it if you create a blocking message box right away. So we just push it back onto the event loop.. I guess.
-                    QTimer::singleShot(0, this, [this]() {
-                        QMessageBox dlg;
-                        dlg.setWindowTitle(tr("Old snapshots"));
-                        dlg.setText(text);
-                        dlg.addButton(QMessageBox::Cancel);
-                        auto* apply = dlg.addButton(QMessageBox::Apply);
-                        apply->setText(tr("Delete"));
-                        dlg.exec();
-                        if (dlg.clickedButton() == apply) {
-                            deleteOld();
-                        }
-                    });
-                }
+            KNotificationAction *actiondelete = notification->addAction({ tr("View and delete") });
+            KNotificationAction *actionignore = notification->addAction({ tr("Disable notifications") });
+            connect(actiondelete, &KNotificationAction::activated, this, [this]() {
+                // KNotification doesn't like it if you create a blocking message box right away. So we just push it back onto the event loop.. I guess.
+                QTimer::singleShot(0, this, [this]() {
+                    QMessageBox dlg;
+                    dlg.setWindowTitle(tr("Old snapshots"));
+                    dlg.setText(text);
+                    dlg.addButton(QMessageBox::Cancel);
+                    auto* apply = dlg.addButton(QMessageBox::Apply);
+                    apply->setText(tr("Delete"));
+                    dlg.exec();
+                    if (dlg.clickedButton() == apply) {
+                        deleteOld();
+                    }
+                });
             });
+            connect(actionignore, &KNotificationAction::activated, this, [this]() { disableWarnings(); });
             notification->sendEvent();
             click_priority = 1;
         }

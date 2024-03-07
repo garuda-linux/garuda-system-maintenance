@@ -1,6 +1,6 @@
 #include "packageagent.h"
 
-#include <KNotifications/KStatusNotifierItem>
+#include <KStatusNotifierItem>
 #include <QAction>
 #include <QDesktopServices>
 #include <QMenu>
@@ -54,12 +54,12 @@ inline static QMap<QString, Checkupdates_data> parseCheckupdates(QString input)
 {
     QMap<QString, Checkupdates_data> map;
 
-    auto lines = input.splitRef("\n");
+    auto lines = input.split("\n");
     for (const auto& line : lines) {
         if (line.isEmpty())
             continue;
         auto words = line.split(" ");
-        map[words[0].toString()] = { words[1].toString(), words[3].toString() };
+        map[words[0]] = { words[1], words[3] };
     }
     return map;
 }

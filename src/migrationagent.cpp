@@ -6,7 +6,7 @@
 #include <QProcess>
 #include <QPushButton>
 #include <QUrl>
-#include <KNotifications/KStatusNotifierItem>
+#include <KStatusNotifierItem>
 
 #define START_SCRIPT "/usr/lib/garuda-system-maintenance/migrate-dr460nized"
 #define DR460NIZED_METADATA "/usr/share/sddm/themes/Dr460nized"

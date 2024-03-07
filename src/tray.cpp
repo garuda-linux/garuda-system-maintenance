@@ -36,7 +36,7 @@ void Tray::setup()
     // connect(hotfixAction, &QAction::triggered, [this]() { updateKeyring(false, true); });
     connect(settingsAction, &QAction::triggered, this, [this]() { showSettings(); });
 
-    trayicon->setAssociatedWidget(nullptr);
+    trayicon->setAssociatedWindow(nullptr);
     connect(trayicon, &KStatusNotifierItem::activateRequested, this, [this]() {
         if (!manager.onTrayIconClick())
             showSettings();

@@ -1,6 +1,6 @@
 #include "forumagent.h"
 
-#include <KNotifications/KNotification>
+#include <KNotification>
 #include <QDesktopServices>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -62,8 +62,8 @@ void ForumAgent::showNotification(ForumData data)
     KNotification* notification = new KNotification("general", KNotification::Persistent);
     notification->setTitle(tr("New maintenance announcement: ") + data.title);
     notification->setText(data.content);
-    notification->setActions({ tr("Open in browser") });
+    KNotificationAction *action = notification->addAction({ tr("Open in browser") });
     QString& url = data.url;
-    connect(notification, QOverload<unsigned int>::of(&KNotification::activated), [url]() { QDesktopServices::openUrl(url); });
+    connect(action, &KNotificationAction::activated, [url]() { QDesktopServices::openUrl(url); });
     notification->sendEvent();
 }
