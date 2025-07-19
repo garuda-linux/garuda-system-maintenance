@@ -48,8 +48,6 @@ set(PROJECT_SOURCES
         updateagent.h
         snapshotagent.cpp
         snapshotagent.h
-        migrationagent.cpp
-        migrationagent.h
         ${TS_FILES}
 )
 list(TRANSFORM PROJECT_SOURCES PREPEND "src/")

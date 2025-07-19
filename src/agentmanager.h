@@ -14,7 +14,7 @@ class AgentManager : public QObject {
 
 public:
     AgentManager();
-    void onRoutine(QSettings *settings);
+    void onRoutine(QSettings *settings, bool init);
     bool onTrayIconClick();
     void onSettingsReloaded();
     void init(QSettings& settings, KStatusNotifierItem* trayicon, std::function<void(int)> priority_callback);
