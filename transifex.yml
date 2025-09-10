@@ -1,0 +1,7 @@
+---
+filters:
+  - filter_type: file
+    file_format: QT
+    source_file: i18n/garuda-system-maintenance_en.ts
+    source_language: en
+    translation_files_expression: 'i18n/garuda-system-maintenance_<lang>.ts'

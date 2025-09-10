@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QLockFile>
 #include <QStandardPaths>
+#include <QTranslator>
 
 int main(int argc, char* argv[])
 {
@@ -22,6 +23,10 @@ int main(int argc, char* argv[])
 
     QWidget* main;
     QLockFile lock(QDir(QStandardPaths::writableLocation(QStandardPaths::RuntimeLocation)).absoluteFilePath("garuda-system-maintenance.lock"));
+
+    QTranslator translator;
+    if (translator.load(QLocale::system(), "garuda-system-maintenance", "_", ":/i18n"))
+        a.installTranslator(&translator);
 
     if (cmdline.isSet(settings)) {
         main = new SettingsDialog;

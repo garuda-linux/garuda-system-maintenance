@@ -24,10 +24,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt6 COMPONENTS Widgets Network REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Network REQUIRED)
+find_package(QT NAMES Qt6 COMPONENTS)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Network LinguistTools REQUIRED)
 find_package(KF6Notifications)
 find_package(KF6StatusNotifierItem)
+
+qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES en am ar bg ca cs da de el es et eu fa fi fil_PH fr he_IL hi hr hu id is it ja kk ko lt mk mr nb nl pl pt pt_BR ro ru sk sl sq sr sv sw tr uk zh_CN zh_TW)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -51,6 +53,13 @@ set(PROJECT_SOURCES
         ${TS_FILES}
 )
 list(TRANSFORM PROJECT_SOURCES PREPEND "src/")
+
+qt_add_translations(garuda-system-maintenance
+    TARGETS garuda-system-maintenance
+    LUPDATE_OPTIONS "-source-language en"
+    TS_OUTPUT_DIRECTORY "i18n/"
+    LUPDATE_TARGET "lupdate"
+)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(garuda-system-maintenance
