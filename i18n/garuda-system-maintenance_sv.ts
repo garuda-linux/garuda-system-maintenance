@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv" sourcelanguage="en">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sv" sourcelanguage="en">
 <context>
     <name>ForumAgent</name>
     <message>
@@ -31,7 +33,7 @@ Tryck på hjälpknappen för att läsa mer om den här snabbkorrigeringen.</tran
         <location filename="../src/packageagent.cpp" line="109"/>
         <location filename="../src/packageagent.cpp" line="111"/>
         <source>Garuda System Maintenance</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/packageagent.cpp" line="88"/>
@@ -199,8 +201,13 @@ Att regelbundet installera systemuppdateringar på en rullande utgåva rekommend
     <message>
         <location filename="../src/updateagent.cpp" line="93"/>
         <source>You performed a &quot;partial upgrade&quot;. Please fully update your system to prevent system instability.
+Performing partial upgrades is unsupported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You performed a &quot;partial upgrade&quot;. Please fully update your system to prevent system instability.
 Performing partial ugprades is unsupported.</source>
-        <translation>Du har utfört en &quot;delvis-uppgradering&quot;. Uppdatera systemet helt för att förhindra systeminstabilitet.
+        <translation type="vanished">Du har utfört en &quot;delvis-uppgradering&quot;. Uppdatera systemet helt för att förhindra systeminstabilitet.
 Det stöds inte att utföra delvisa uppgraderingar.</translation>
     </message>
     <message>

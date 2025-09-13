@@ -198,7 +198,7 @@ Regularly applying system updates on a rolling release distribution is highly en
     <message>
         <location filename="../src/updateagent.cpp" line="93"/>
         <source>You performed a &quot;partial upgrade&quot;. Please fully update your system to prevent system instability.
-Performing partial ugprades is unsupported.</source>
+Performing partial upgrades is unsupported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

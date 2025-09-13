@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de" sourcelanguage="en">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="de" sourcelanguage="en">
 <context>
     <name>ForumAgent</name>
     <message>
@@ -31,7 +33,7 @@ Klicken Sie auf die Hilfe-Schaltfläche, um mehr über dieses Hotfix zu erfahren
         <location filename="../src/packageagent.cpp" line="109"/>
         <location filename="../src/packageagent.cpp" line="111"/>
         <source>Garuda System Maintenance</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/packageagent.cpp" line="88"/>
@@ -199,8 +201,13 @@ Um verschiedene Probleme zu vermeiden, wird dringend empfohlen, regelmäßig Sys
     <message>
         <location filename="../src/updateagent.cpp" line="93"/>
         <source>You performed a &quot;partial upgrade&quot;. Please fully update your system to prevent system instability.
+Performing partial upgrades is unsupported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You performed a &quot;partial upgrade&quot;. Please fully update your system to prevent system instability.
 Performing partial ugprades is unsupported.</source>
-        <translation>Sie haben ein „partial upgrade“ durchgeführt. Bitte aktualisieren Sie Ihr System vollständig, um Systeminstabilitäten zu vermeiden.
+        <translation type="vanished">Sie haben ein „partial upgrade“ durchgeführt. Bitte aktualisieren Sie Ihr System vollständig, um Systeminstabilitäten zu vermeiden.
 Partial upgrades werden nicht unterstützt.</translation>
     </message>
     <message>
