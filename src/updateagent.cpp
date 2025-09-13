@@ -90,7 +90,7 @@ void UpdateAgent::trayIconClicked()
     if (outofdate || partial) {
         QMessageBox dlg;
         dlg.setWindowTitle(outofdate ? tr("System out of date") : tr("Partial upgrade detected"));
-        dlg.setText(outofdate ? tr("This system has not been updated in a long time.\nRegularly applying system updates on a rolling release distribution is highly encouraged to avoid various issues.") : tr("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial ugprades is unsupported."));
+        dlg.setText(outofdate ? tr("This system has not been updated in a long time.\nRegularly applying system updates on a rolling release distribution is highly encouraged to avoid various issues.") : tr("You performed a \"partial upgrade\". Please fully update your system to prevent system instability.\nPerforming partial upgrades is unsupported."));
 
         dlg.addButton(QMessageBox::Cancel);
 
