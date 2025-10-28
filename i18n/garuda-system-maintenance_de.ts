@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de" sourcelanguage="en">
 <context>
     <name>ForumAgent</name>
     <message>
@@ -12,39 +10,6 @@
         <location filename="../src/forumagent.cpp" line="65"/>
         <source>Open in browser</source>
         <translation>Im Browser öffnen</translation>
-    </message>
-</context>
-<context>
-    <name>PackageAgent</name>
-    <message>
-        <source>Hotfix available!</source>
-        <translation type="vanished">Hotfix verfügbar!</translation>
-    </message>
-    <message>
-        <source>Important hotfix update found. Do you want to apply the hotfix (recommended)?
-Press the help button to learn more about this hotfix.</source>
-        <translation type="vanished">Wichtiges Hotfix-Update gefunden. Möchten Sie das Hotfix anwenden (empfohlen)?
-Klicken Sie auf die Hilfe-Schaltfläche, um mehr über dieses Hotfix zu erfahren.</translation>
-    </message>
-    <message>
-        <source>Updating keyrings in the background...</source>
-        <translation type="vanished">Keyrings werden im Hintergrund aktualisiert …</translation>
-    </message>
-    <message>
-        <source>Hotfix successfully applied!</source>
-        <translation type="vanished">Hotfix erfolgreich angewendet!</translation>
-    </message>
-    <message>
-        <source>Keyrings successfully updated!</source>
-        <translation type="vanished">Keyring erfolgreich aktualisiert!</translation>
-    </message>
-    <message>
-        <source>Hotfix failed!</source>
-        <translation type="vanished">Hotfix fehlgeschlagen!</translation>
-    </message>
-    <message>
-        <source>Keyring update failed!</source>
-        <translation type="vanished">Keyring-Update fehlgeschlagen!</translation>
     </message>
 </context>
 <context>
