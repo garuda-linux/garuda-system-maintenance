@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="sv" sourcelanguage="en">
 <context>
     <name>ForumAgent</name>
     <message>
@@ -12,39 +10,6 @@
         <location filename="../src/forumagent.cpp" line="65"/>
         <source>Open in browser</source>
         <translation>Öppna i webbläsare</translation>
-    </message>
-</context>
-<context>
-    <name>PackageAgent</name>
-    <message>
-        <source>Hotfix available!</source>
-        <translation type="vanished">Snabbkorrigering tillgänglig!</translation>
-    </message>
-    <message>
-        <source>Important hotfix update found. Do you want to apply the hotfix (recommended)?
-Press the help button to learn more about this hotfix.</source>
-        <translation type="vanished">Viktig snabbkorrigeringsuppdatering hittades. Vill du installera snabbkorrigeringen (rekommenderas)?
-Tryck på hjälpknappen för att läsa mer om den här snabbkorrigeringen.</translation>
-    </message>
-    <message>
-        <source>Updating keyrings in the background...</source>
-        <translation type="vanished">Uppdaterar nyckelringar i bakgrunden...</translation>
-    </message>
-    <message>
-        <source>Hotfix successfully applied!</source>
-        <translation type="vanished">Snabbkorrigeringen har installerats!</translation>
-    </message>
-    <message>
-        <source>Keyrings successfully updated!</source>
-        <translation type="vanished">Nyckelringar har uppdaterats!</translation>
-    </message>
-    <message>
-        <source>Hotfix failed!</source>
-        <translation type="vanished">Snabbkorrigeringen misslyckades!</translation>
-    </message>
-    <message>
-        <source>Keyring update failed!</source>
-        <translation type="vanished">Nyckelringsuppdateringen misslyckades!</translation>
     </message>
 </context>
 <context>
