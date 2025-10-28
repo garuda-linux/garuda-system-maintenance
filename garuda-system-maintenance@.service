@@ -1,7 +1,0 @@
-[Unit]
-Description=Garuda System Maintenance Keyring Updater
-
-[Service]
-Type=oneshot
-Environment="ARG=\"%I\""
-ExecStart=/usr/lib/garuda-system-maintenance/update-packages "$ARG"

@@ -44,8 +44,6 @@ set(PROJECT_SOURCES
         agentmanager.h
         forumagent.cpp
         forumagent.h
-        packageagent.cpp
-        packageagent.h
         updateagent.cpp
         updateagent.h
         snapshotagent.cpp

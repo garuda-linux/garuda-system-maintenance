@@ -1,7 +1,6 @@
 #include "agentmanager.h"
 
 #include "forumagent.h"
-#include "packageagent.h"
 #include "snapshotagent.h"
 #include "updateagent.h"
 
@@ -55,7 +54,6 @@ void AgentManager::init(QSettings& settings, KStatusNotifierItem* trayicon, std:
 
     ManagerData data { [this, priority_callback]() { priority_callback(getHighestPriorityAgent()->click_priority); }, settings, trayicon };
     agents += new ForumAgent(data);
-    agents += new PackageAgent(data);
     agents += new UpdateAgent(data);
     agents += new SnapshotAgent(data);
     connect(timer, &QTimer::timeout, this, std::bind(&AgentManager::onRoutine, this, &settings, false));
