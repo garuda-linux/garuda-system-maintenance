@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="uk" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="uk" sourcelanguage="en">
 <context>
     <name>ForumAgent</name>
     <message>
@@ -12,39 +10,6 @@
         <location filename="../src/forumagent.cpp" line="65"/>
         <source>Open in browser</source>
         <translation>Відкрити у браузері</translation>
-    </message>
-</context>
-<context>
-    <name>PackageAgent</name>
-    <message>
-        <source>Hotfix available!</source>
-        <translation type="vanished">Доступне виправлення!</translation>
-    </message>
-    <message>
-        <source>Important hotfix update found. Do you want to apply the hotfix (recommended)?
-Press the help button to learn more about this hotfix.</source>
-        <translation type="vanished">Знайдено важливе виправлення. Бажаєте застосувати виправлення (рекомендовано)?
-Натисніть кнопку довідки, щоб дізнатися більше про це виправлення.</translation>
-    </message>
-    <message>
-        <source>Updating keyrings in the background...</source>
-        <translation type="vanished">Оновлення ключів у фоновому режимі...</translation>
-    </message>
-    <message>
-        <source>Hotfix successfully applied!</source>
-        <translation type="vanished">Виправлення успішно застосовано!</translation>
-    </message>
-    <message>
-        <source>Keyrings successfully updated!</source>
-        <translation type="vanished">Ключі успішно оновлено!</translation>
-    </message>
-    <message>
-        <source>Hotfix failed!</source>
-        <translation type="vanished">Виправлення не вдалося!</translation>
-    </message>
-    <message>
-        <source>Keyring update failed!</source>
-        <translation type="vanished">Не вдалося оновити ключі!</translation>
     </message>
 </context>
 <context>
