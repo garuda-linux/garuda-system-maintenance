@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="uk" sourcelanguage="en">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="uk" sourcelanguage="en">
 <context>
     <name>ForumAgent</name>
     <message>
@@ -15,48 +17,34 @@
 <context>
     <name>PackageAgent</name>
     <message>
-        <location filename="../src/packageagent.cpp" line="75"/>
         <source>Hotfix available!</source>
-        <translation>Доступне виправлення!</translation>
+        <translation type="vanished">Доступне виправлення!</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="75"/>
         <source>Important hotfix update found. Do you want to apply the hotfix (recommended)?
 Press the help button to learn more about this hotfix.</source>
-        <translation>Знайдено важливе виправлення. Бажаєте застосувати виправлення (рекомендовано)?
+        <translation type="vanished">Знайдено важливе виправлення. Бажаєте застосувати виправлення (рекомендовано)?
 Натисніть кнопку довідки, щоб дізнатися більше про це виправлення.</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="88"/>
-        <location filename="../src/packageagent.cpp" line="109"/>
-        <location filename="../src/packageagent.cpp" line="111"/>
-        <source>Garuda System Maintenance</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/packageagent.cpp" line="88"/>
         <source>Updating keyrings in the background...</source>
-        <translation>Оновлення ключів у фоновому режимі...</translation>
+        <translation type="vanished">Оновлення ключів у фоновому режимі...</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="109"/>
         <source>Hotfix successfully applied!</source>
-        <translation>Виправлення успішно застосовано!</translation>
+        <translation type="vanished">Виправлення успішно застосовано!</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="109"/>
         <source>Keyrings successfully updated!</source>
-        <translation>Ключі успішно оновлено!</translation>
+        <translation type="vanished">Ключі успішно оновлено!</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="111"/>
         <source>Hotfix failed!</source>
-        <translation>Виправлення не вдалося!</translation>
+        <translation type="vanished">Виправлення не вдалося!</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="111"/>
         <source>Keyring update failed!</source>
-        <translation>Не вдалося оновити ключі!</translation>
+        <translation type="vanished">Не вдалося оновити ключі!</translation>
     </message>
 </context>
 <context>

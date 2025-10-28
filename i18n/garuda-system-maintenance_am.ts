@@ -15,52 +15,6 @@
     </message>
 </context>
 <context>
-    <name>PackageAgent</name>
-    <message>
-        <location filename="../src/packageagent.cpp" line="75"/>
-        <source>Hotfix available!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/packageagent.cpp" line="75"/>
-        <source>Important hotfix update found. Do you want to apply the hotfix (recommended)?
-Press the help button to learn more about this hotfix.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/packageagent.cpp" line="88"/>
-        <location filename="../src/packageagent.cpp" line="109"/>
-        <location filename="../src/packageagent.cpp" line="111"/>
-        <source>Garuda System Maintenance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/packageagent.cpp" line="88"/>
-        <source>Updating keyrings in the background...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/packageagent.cpp" line="109"/>
-        <source>Hotfix successfully applied!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/packageagent.cpp" line="109"/>
-        <source>Keyrings successfully updated!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/packageagent.cpp" line="111"/>
-        <source>Hotfix failed!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/packageagent.cpp" line="111"/>
-        <source>Keyring update failed!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>SettingsDialog</name>
     <message>
         <location filename="../src/settingsdialog.ui" line="21"/>

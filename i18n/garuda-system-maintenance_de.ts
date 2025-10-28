@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="de" sourcelanguage="en">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="de" sourcelanguage="en">
 <context>
     <name>ForumAgent</name>
     <message>
@@ -15,48 +17,34 @@
 <context>
     <name>PackageAgent</name>
     <message>
-        <location filename="../src/packageagent.cpp" line="75"/>
         <source>Hotfix available!</source>
-        <translation>Hotfix verfügbar!</translation>
+        <translation type="vanished">Hotfix verfügbar!</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="75"/>
         <source>Important hotfix update found. Do you want to apply the hotfix (recommended)?
 Press the help button to learn more about this hotfix.</source>
-        <translation>Wichtiges Hotfix-Update gefunden. Möchten Sie das Hotfix anwenden (empfohlen)?
+        <translation type="vanished">Wichtiges Hotfix-Update gefunden. Möchten Sie das Hotfix anwenden (empfohlen)?
 Klicken Sie auf die Hilfe-Schaltfläche, um mehr über dieses Hotfix zu erfahren.</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="88"/>
-        <location filename="../src/packageagent.cpp" line="109"/>
-        <location filename="../src/packageagent.cpp" line="111"/>
-        <source>Garuda System Maintenance</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/packageagent.cpp" line="88"/>
         <source>Updating keyrings in the background...</source>
-        <translation>Keyrings werden im Hintergrund aktualisiert …</translation>
+        <translation type="vanished">Keyrings werden im Hintergrund aktualisiert …</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="109"/>
         <source>Hotfix successfully applied!</source>
-        <translation>Hotfix erfolgreich angewendet!</translation>
+        <translation type="vanished">Hotfix erfolgreich angewendet!</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="109"/>
         <source>Keyrings successfully updated!</source>
-        <translation>Keyring erfolgreich aktualisiert!</translation>
+        <translation type="vanished">Keyring erfolgreich aktualisiert!</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="111"/>
         <source>Hotfix failed!</source>
-        <translation>Hotfix fehlgeschlagen!</translation>
+        <translation type="vanished">Hotfix fehlgeschlagen!</translation>
     </message>
     <message>
-        <location filename="../src/packageagent.cpp" line="111"/>
         <source>Keyring update failed!</source>
-        <translation>Keyring-Update fehlgeschlagen!</translation>
+        <translation type="vanished">Keyring-Update fehlgeschlagen!</translation>
     </message>
 </context>
 <context>
