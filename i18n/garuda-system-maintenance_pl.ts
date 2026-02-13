@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pl" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="pl" sourcelanguage="en">
 <context>
     <name>ForumAgent</name>
     <message>
         <location filename="../src/forumagent.cpp" line="63"/>
         <source>New maintenance announcement: </source>
-        <translation type="unfinished"></translation>
+        <translation>Nowe ogłoszenie o konserwacji:</translation>
     </message>
     <message>
         <location filename="../src/forumagent.cpp" line="65"/>
         <source>Open in browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz w przeglądarce</translation>
     </message>
 </context>
 <context>
@@ -19,42 +17,42 @@
     <message>
         <location filename="../src/settingsdialog.ui" line="21"/>
         <source>Automatic updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatyczne aktualizacje</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="27"/>
         <source>Automatically update core keyrings</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatycznie aktualizuj keyring&apos;i rdzeniowe</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="52"/>
         <source>Prompt to apply critical hotfixes immediately</source>
-        <translation type="unfinished"></translation>
+        <translation>Monit o natychmiastowe zastosowanie krytycznych poprawek</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="64"/>
         <source>Notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Powiadomienia</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="70"/>
         <source>Notify about forum maintenance announcement posts</source>
-        <translation type="unfinished"></translation>
+        <translation>Powiadom o ogłoszeniach o konserwacji na forum</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="77"/>
         <source>Notify about partial upgrades</source>
-        <translation type="unfinished"></translation>
+        <translation>Powiadom o częsciowych aktualizacjach</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="84"/>
         <source>Notify if system is critically out of date</source>
-        <translation type="unfinished"></translation>
+        <translation>Powiadom, gdy system jest krytycznie przestarzały</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="91"/>
         <source>Notify about old snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation>Powiadom o starych snapshot&apos;ach</translation>
     </message>
 </context>
 <context>
@@ -62,44 +60,45 @@
     <message>
         <location filename="../src/snapshotagent.cpp" line="24"/>
         <source>Old snapshots/backups found</source>
-        <translation type="unfinished"></translation>
+        <translation>Znaleziono stare snapshoty/backupy</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="25"/>
         <source>Old snapshots or snapshot restore backups have been found that are using up disk space.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Znaleziono stare snapshoty lub kopie zapasowe snapshotów, zajmujące miejsce na dysku
+</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="26"/>
         <source>View and delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobacz i skasuj</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="27"/>
         <source>Disable notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyłącz powiadomienia</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="32"/>
         <source>Old snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation>Stare snapshoty</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="36"/>
         <location filename="../src/snapshotagent.cpp" line="70"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Skasuj</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="66"/>
         <source>Old snapshots/backups found!</source>
-        <translation type="unfinished"></translation>
+        <translation>Znaleziono stare snapshoty/backupy!</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="72"/>
         <source>Ignore permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignoruj na stałe</translation>
     </message>
 </context>
 <context>
@@ -107,7 +106,7 @@
     <message>
         <location filename="../src/tray.ui" line="14"/>
         <source>Tray</source>
-        <translation type="unfinished"></translation>
+        <translation>Tacka</translation>
     </message>
 </context>
 <context>
@@ -116,49 +115,51 @@
         <location filename="../src/updateagent.cpp" line="25"/>
         <location filename="../src/updateagent.cpp" line="92"/>
         <source>System out of date</source>
-        <translation type="unfinished"></translation>
+        <translation>System przestarzały</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="26"/>
         <location filename="../src/updateagent.cpp" line="93"/>
         <source>This system has not been updated in a long time.
 Regularly applying system updates on a rolling release distribution is highly encouraged to avoid various issues.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten system nie był aktualizowany od dłuższego czasu.
+Regularne aktualizacje systemu przy dystrybucji typu &quot;rolling&quot; jest wysoce rekomendowane aby uniknąć wielu problemów.</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="27"/>
         <location filename="../src/updateagent.cpp" line="67"/>
         <location filename="../src/updateagent.cpp" line="98"/>
         <source>Update system</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualizuj system</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="28"/>
         <location filename="../src/updateagent.cpp" line="69"/>
         <source>Disable warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyłącz ostrzeżenia</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="68"/>
         <location filename="../src/updateagent.cpp" line="103"/>
         <source>Learn more</source>
-        <translation type="unfinished"></translation>
+        <translation>Dowiedz się więcej</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="92"/>
         <source>Partial upgrade detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykryto częściową aktualizację</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="93"/>
         <source>You performed a &quot;partial upgrade&quot;. Please fully update your system to prevent system instability.
 Performing partial upgrades is unsupported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wykonałeś/aś &quot;częściowej aktualizacji&quot;. Prosimy o wykonanie pełnej aktualizacji, aby uniknąć niestabilności systemu.
+Wykonywanie częsciowych aktualizacji nie jest wspierane.</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="107"/>
         <source>Ignore permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignoruj na stałe</translation>
     </message>
 </context>
 </TS>
