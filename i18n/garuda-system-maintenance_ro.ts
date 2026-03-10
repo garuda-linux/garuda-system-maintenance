@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ro" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ro" sourcelanguage="en">
 <context>
     <name>ForumAgent</name>
     <message>
         <location filename="../src/forumagent.cpp" line="63"/>
         <source>New maintenance announcement: </source>
-        <translation type="unfinished"></translation>
+        <translation>Anunț nou:</translation>
     </message>
     <message>
         <location filename="../src/forumagent.cpp" line="65"/>
         <source>Open in browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Deschide în browser</translation>
     </message>
 </context>
 <context>
@@ -19,42 +17,42 @@
     <message>
         <location filename="../src/settingsdialog.ui" line="21"/>
         <source>Automatic updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizări automate</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="27"/>
         <source>Automatically update core keyrings</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizați automat keyrings de bază</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="52"/>
         <source>Prompt to apply critical hotfixes immediately</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmă aplicarea imediată a patch-urilor critice</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="64"/>
         <source>Notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Notificări</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="70"/>
         <source>Notify about forum maintenance announcement posts</source>
-        <translation type="unfinished"></translation>
+        <translation>Notifică-mă despre anunțurile de pe forum legate de întreținerea systemului</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="77"/>
         <source>Notify about partial upgrades</source>
-        <translation type="unfinished"></translation>
+        <translation>Notifică-mă despre actualizările parțiale</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="84"/>
         <source>Notify if system is critically out of date</source>
-        <translation type="unfinished"></translation>
+        <translation>Notifică-mă dacă versiunea sistemului este depășită critic</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.ui" line="91"/>
         <source>Notify about old snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation>Notifică-mă despre capturi de sistem invechite</translation>
     </message>
 </context>
 <context>
@@ -62,44 +60,45 @@
     <message>
         <location filename="../src/snapshotagent.cpp" line="24"/>
         <source>Old snapshots/backups found</source>
-        <translation type="unfinished"></translation>
+        <translation>S-au găsit capturi de sistem/backup-uri invechite</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="25"/>
         <source>Old snapshots or snapshot restore backups have been found that are using up disk space.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Au fost găsite capturi de sistem vechi sau backup-uri care ocupă spațiu pe disc.
+</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="26"/>
         <source>View and delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Vizualizați și ștergeți</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="27"/>
         <source>Disable notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Dezactivați notificările</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="32"/>
         <source>Old snapshots</source>
-        <translation type="unfinished"></translation>
+        <translation>Capturi de sistem vechi</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="36"/>
         <location filename="../src/snapshotagent.cpp" line="70"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Şterge</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="66"/>
         <source>Old snapshots/backups found!</source>
-        <translation type="unfinished"></translation>
+        <translation>S-au găsit capturi de sistem/backup-uri vechi!</translation>
     </message>
     <message>
         <location filename="../src/snapshotagent.cpp" line="72"/>
         <source>Ignore permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignoră definitiv</translation>
     </message>
 </context>
 <context>
@@ -107,7 +106,7 @@
     <message>
         <location filename="../src/tray.ui" line="14"/>
         <source>Tray</source>
-        <translation type="unfinished"></translation>
+        <translation>Zonă notificari</translation>
     </message>
 </context>
 <context>
@@ -116,49 +115,51 @@
         <location filename="../src/updateagent.cpp" line="25"/>
         <location filename="../src/updateagent.cpp" line="92"/>
         <source>System out of date</source>
-        <translation type="unfinished"></translation>
+        <translation>Versiunea sistemului este învechită</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="26"/>
         <location filename="../src/updateagent.cpp" line="93"/>
         <source>This system has not been updated in a long time.
 Regularly applying system updates on a rolling release distribution is highly encouraged to avoid various issues.</source>
-        <translation type="unfinished"></translation>
+        <translation>Acest sistem nu a fost actualizat de mult timp.
+Aplicarea regulată a actualizărilor de sistem pe o distribuție cu lansare continuă este foarte recomandată pentru a evita diverse probleme.</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="27"/>
         <location filename="../src/updateagent.cpp" line="67"/>
         <location filename="../src/updateagent.cpp" line="98"/>
         <source>Update system</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizați sistemul</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="28"/>
         <location filename="../src/updateagent.cpp" line="69"/>
         <source>Disable warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>Dezactivați avertismentele</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="68"/>
         <location filename="../src/updateagent.cpp" line="103"/>
         <source>Learn more</source>
-        <translation type="unfinished"></translation>
+        <translation>Află mai multe</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="92"/>
         <source>Partial upgrade detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizare parțială detectată</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="93"/>
         <source>You performed a &quot;partial upgrade&quot;. Please fully update your system to prevent system instability.
 Performing partial upgrades is unsupported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ați efectuat o „actualizare parțială”. Vă rugăm să actualizați complet sistemul pentru a preveni instabilitatea sistemului.
+Efectuarea de actualizări parțiale nu este suportată.</translation>
     </message>
     <message>
         <location filename="../src/updateagent.cpp" line="107"/>
         <source>Ignore permanently</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignoră definitiv</translation>
     </message>
 </context>
 </TS>
