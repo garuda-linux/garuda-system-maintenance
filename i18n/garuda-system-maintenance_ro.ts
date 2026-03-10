@@ -106,7 +106,7 @@
     <message>
         <location filename="../src/tray.ui" line="14"/>
         <source>Tray</source>
-        <translation>Zonă notificari</translation>
+        <translation>Zonă notificări</translation>
     </message>
 </context>
 <context>
