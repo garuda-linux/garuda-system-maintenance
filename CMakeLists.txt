@@ -29,7 +29,18 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Network LinguistTools REQU
 find_package(KF6Notifications)
 find_package(KF6StatusNotifierItem)
 
-qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES en am ar bg ca cs da de el es et eu fa fi fil_PH fr he_IL hi hr hu id is it ja kk ko lt mk mr nb nl pl pt pt_BR ro ru sk sl sq sr sv sw tr uk zh_CN zh_TW)
+file(GLOB _TS_FILES_GLOB CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/i18n/*.ts")
+set(PARSED_LANGUAGES "")
+foreach(ts_file IN LISTS _TS_FILES_GLOB)
+    if(ts_file MATCHES "_([a-z]+(_[A-Z]+)?).ts$")
+        list(APPEND PARSED_LANGUAGES "${CMAKE_MATCH_1}")
+    endif()
+endforeach()
+if(PARSED_LANGUAGES)
+    list(REMOVE_DUPLICATES PARSED_LANGUAGES)
+    list(SORT PARSED_LANGUAGES)
+endif()
+qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ${PARSED_LANGUAGES})
 
 set(PROJECT_SOURCES
         main.cpp
